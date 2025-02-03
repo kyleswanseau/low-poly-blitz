@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class AssetComponent : MonoBehaviour
 {
-    private Light haloComp;
-    private static Camera mainCam;
-    private bool isHovered = false;
-    private bool isSelected = false;
+    //private Light haloComp;
+    protected static Camera mainCam;
+    protected bool isHovered = false;
+    protected bool isSelected = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected void Start()
     {
         mainCam = Camera.main;
         Light? halo = gameObject.GetComponentInChildren<Light>();

@@ -1,42 +1,32 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class UnitComponent : AssetComponent
 {
-    public Camera cam;
-    Vector3 pos;
-    bool selected;
+    protected NavMeshAgent agent;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected void Start()
     {
-        GameObject cube = this.gameObject;
-        Renderer renderer = cube.GetComponent<Renderer>();
-        renderer.material.SetColor("_BaseColor", Color.black);
-        selected = false;
+        base.Start();
+        agent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        pos = cam.WorldToScreenPoint(this.gameObject.transform.position);
-    }
-
-    public Vector3 getPos()
-    {
-        return pos;
-    }
-
-    public void setSelected(bool selected)
-    {
-        this.selected = selected;
-        Renderer renderer = this.gameObject.GetComponent<Renderer>();
-        if (this.selected)
+        if (isSelected && Input.GetMouseButtonDown(1))
         {
-            renderer.material.SetColor("_BaseColor", Color.black);
+            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                MoveTo(hit.point);
+            }
         }
-        else
-        {
-            renderer.material.SetColor("_BaseColor", Color.white);
-        }
+    }
+
+    public void MoveTo(Vector3 position)
+    {
+        agent.SetDestination(position);
     }
 }
