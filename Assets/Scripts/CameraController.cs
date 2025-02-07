@@ -74,13 +74,13 @@ public class CameraController : MonoBehaviour
         {
             endPos = pos;
             Rect selection = SomeRect(startPos.Value, endPos.Value);
-            Vector2 objPos = obj.GetComponent<AssetComponent>().getPositionInCam();
-            obj.GetComponent<AssetComponent>().setSelected(selection.Contains(objPos));
+            Vector2 objPos = obj.GetComponent<Asset>().getPositionInCam();
+            obj.GetComponent<Asset>().setSelected(selection.Contains(objPos));
             startPos = endPos = null;
         }
         else if (mouse.leftButton.wasPressedThisFrame)
         {
-            obj.GetComponent<AssetComponent>()
+            obj.GetComponent<Asset>()
                 .setSelected(false);
             startPos = pos;
         }
@@ -88,8 +88,8 @@ public class CameraController : MonoBehaviour
         {
             endPos = pos;
             Rect selection = SomeRect(startPos.Value, endPos.Value);
-            Vector2 objPos = obj.GetComponent<AssetComponent>().getPositionInCam();
-            obj.GetComponent<AssetComponent>().setHovered(selection.Contains(objPos));
+            Vector2 objPos = obj.GetComponent<Asset>().getPositionInCam();
+            obj.GetComponent<Asset>().setHovered(selection.Contains(objPos));
         }
     }
 

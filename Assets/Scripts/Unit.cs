@@ -2,19 +2,21 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class UnitComponent : AssetComponent
+public class Unit : Asset
 {
+    protected float moveSpeed = 0;
     protected NavMeshAgent agent;
 
-    protected void Start()
+    new protected void Start()
     {
         base.Start();
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed;
     }
 
     protected void Update()
     {
-        if (isSelected && Input.GetMouseButtonDown(1))
+        if (IsSelected && Input.GetMouseButtonDown(1))
         {
             Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

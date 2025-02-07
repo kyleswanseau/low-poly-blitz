@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class AssetComponent : MonoBehaviour
+public class Asset : MonoBehaviour
 {
     //private Light haloComp;
     protected static Camera mainCam;
-    protected bool isHovered = false;
-    protected bool isSelected = false;
+    public bool IsHovered { get; set; } = false;
+    public bool IsSelected { get; set; } = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected void Start()
@@ -15,7 +15,7 @@ public class AssetComponent : MonoBehaviour
         if (halo != null)
         {
             halo.intensity = 100;
-            halo.enabled = isSelected;
+            halo.enabled = IsSelected;
         }
         /*
         GameObject haloObj = new GameObject("Halo");
@@ -32,6 +32,11 @@ public class AssetComponent : MonoBehaviour
         */
     }
 
+    protected void Update()
+    {
+
+    }
+
     public Vector3 getPositionInCam()
     {
         return mainCam.WorldToScreenPoint(gameObject.transform.position);
@@ -40,19 +45,19 @@ public class AssetComponent : MonoBehaviour
     public void setHovered(bool hovered)
     {
 
-        isHovered = hovered;
+        IsHovered = hovered;
         Light? halo = gameObject.GetComponentInChildren<Light>();
         if (halo != null)
         {
             halo.intensity = 20;
-            halo.enabled = isHovered;
+            halo.enabled = IsHovered;
         }
     }
 
     public void setSelected(bool selected)
     {
-        isSelected = selected;
-        if (isSelected)
+        IsSelected = selected;
+        if (IsSelected)
         {
             setHovered(false);
         }
@@ -60,7 +65,7 @@ public class AssetComponent : MonoBehaviour
         if (halo != null)
         {
             halo.intensity = 100;
-            halo.enabled = isSelected;
+            halo.enabled = IsSelected;
         }
     }
 }

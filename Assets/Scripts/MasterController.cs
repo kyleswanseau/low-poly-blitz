@@ -6,7 +6,7 @@ public class MasterController : MonoBehaviour
     void Start()
     {
         GameObject cube = new GameObject("New Cube");
-        cube.AddComponent<AssetComponent>();
+        cube.AddComponent<Asset>();
         Instantiate(cube, new Vector3(5, 0.5f, 5), new Quaternion());
     }
 
