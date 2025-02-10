@@ -1,24 +1,23 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Unit : Asset
 {
-    protected float moveSpeed = 0;
-    protected NavMeshAgent agent;
+    protected float _moveSpeed = 0;
+    protected NavMeshAgent _agent;
 
     new protected void Start()
     {
         base.Start();
-        agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed;
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.speed = _moveSpeed;
     }
 
     protected void Update()
     {
-        if (IsSelected && Input.GetMouseButtonDown(1))
+        if (isSelected && Input.GetMouseButtonDown(1))
         {
-            Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -29,6 +28,6 @@ public class Unit : Asset
 
     public void MoveTo(Vector3 position)
     {
-        agent.SetDestination(position);
+        _agent.SetDestination(position);
     }
 }

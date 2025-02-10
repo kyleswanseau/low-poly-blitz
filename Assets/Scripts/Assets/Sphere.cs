@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class Cube : Unit
+public class Sphere : Unit
 {
     private static float MOVE_SPEED = 5f;
 
     new protected void Start()
     {
-        moveSpeed = MOVE_SPEED;
+        _moveSpeed = MOVE_SPEED;
         base.Start();
     }
 

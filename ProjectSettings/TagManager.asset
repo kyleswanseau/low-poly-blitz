@@ -5,6 +5,17 @@ TagManager:
   serializedVersion: 3
   tags:
   - CubePool
+  - SpherePool
+  - TetraPool
+  - Cube
+  - Sphere
+  - Tetra
+  - FactoryPool
+  - PylonPool
+  - MinePool
+  - Factory
+  - Pylon
+  - Mine
   layers:
   - Default
   - TransparentFX
@@ -12,7 +23,7 @@ TagManager:
   - 
   - Water
   - UI
-  - Environment
+  - Terrain
   - 
   - 
   - 
