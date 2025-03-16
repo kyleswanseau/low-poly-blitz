@@ -9,29 +9,27 @@ public class MasterController : MonoBehaviour
 
     private void Start()
     {
-        Player player0 = GetComponent<TeamController>().GetPlayer(0);
         Player player1 = GetComponent<TeamController>().GetPlayer(1);
+        Player player2 = GetComponent<TeamController>().GetPlayer(2);
         Camera mainCam = Camera.main;
-        mainCam.GetComponent<PlayerComponent>().SetPlayer(player0);
+        mainCam.GetComponent<PlayerComponent>().player = player1;
 
         GameObject newCube = Instantiate(cube);
         GameObject newSphere = Instantiate(sphere);
         GameObject newTetra = Instantiate(tetra);
         GameObject newFactory = Instantiate(factory);
 
-        newCube.GetComponent<PlayerComponent>().SetPlayer(player0);
-        newSphere.GetComponent<PlayerComponent>().SetPlayer(player0);
-        newTetra.GetComponent<PlayerComponent>().SetPlayer(player1);
-        newFactory.GetComponent<PlayerComponent>().SetPlayer(player0);
+        newCube.GetComponent<PlayerComponent>().player = player1;
+        newSphere.GetComponent<PlayerComponent>().player = player1;
+        newTetra.GetComponent<PlayerComponent>().player = player2;
+        newFactory.GetComponent<PlayerComponent>().player = player1;
         mainCam.GetComponent<PlayerController>().AddPlayerAsset(newCube);
         mainCam.GetComponent<PlayerController>().AddPlayerAsset(newSphere);
         //mainCam.GetComponent<PlayerController>().AddPlayerAsset(newTetra);
         mainCam.GetComponent<PlayerController>().AddPlayerAsset(newFactory);
-
-        Debug.Log(newTetra.GetComponent<PlayerComponent>().GetPlayer().index);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         
     }

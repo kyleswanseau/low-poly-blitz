@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class Building : Asset
+public abstract class Building : Asset
 {
-    new protected void Start()
+    protected override void Start()
     {
         base.Start();
     }
 
-    new protected void Update()
+    protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
     }
 }

@@ -76,10 +76,10 @@ public class PlayerController : MonoBehaviour
 
     public void AddPlayerAsset(GameObject asset)
     {
-        if (null != asset.GetComponent<PlayerComponent>())
+        if (asset.GetComponent<PlayerComponent>())
         {
-            Player player = gameObject.GetComponent<PlayerComponent>().GetPlayer();
-            asset.GetComponent<PlayerComponent>().SetPlayer(player);
+            Player player = GetComponent<PlayerComponent>().player;
+            asset.GetComponent<PlayerComponent>().player = player;
             assets.Add(asset);
         }
         else
@@ -90,8 +90,15 @@ public class PlayerController : MonoBehaviour
 
     public void RemovePlayerAsset(GameObject asset)
     {
-        asset.GetComponent<PlayerComponent>().ClearPlayer();
-        assets.Remove(asset);
+        if (asset.GetComponent<PlayerComponent>())
+        {
+            asset.GetComponent<PlayerComponent>().player = Player.neutralPlayer;
+            assets.Remove(asset);
+        }
+        else
+        {
+            Debug.LogError("Attempted to add invalid game object to player control.");
+        }
     }
 
     public List<GameObject> GetPlayerAssets()

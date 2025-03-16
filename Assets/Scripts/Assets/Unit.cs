@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Unit : Asset
+public abstract class Unit : Asset
 {
-    protected float _moveSpeed = 0;
     protected NavMeshAgent _agent;
 
-    new protected void Start()
+    protected abstract float speed { get; set; }
+    protected abstract int damage { get; set; }
+    protected abstract int range { get; set; }
+
+    protected override void Start()
     {
         base.Start();
         _agent = GetComponent<NavMeshAgent>();
-        _agent.speed = _moveSpeed;
+        _agent.speed = speed;
     }
 
-    protected void Update()
+    protected override void FixedUpdate()
     {
         if (isSelected && Input.GetMouseButtonDown(1))
         {
@@ -25,6 +28,8 @@ public class Unit : Asset
             }
         }
     }
+
+    protected abstract void Attack(Asset asset);
 
     public void MoveTo(Vector3 position)
     {

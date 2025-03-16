@@ -2,43 +2,53 @@ using UnityEngine;
 
 public class Factory : Building
 {
-    private AssetPool _cubePool;
-    private AssetPool _spherePool;
-    private AssetPool _tetraPool;
+    protected AssetPool _cubePool;
+    protected AssetPool _spherePool;
+    protected AssetPool _tetraPool;
 
-    new private void Start()
+    protected override AssetPool pool { get; set; }
+    protected override int health { get; set; }
+
+    protected override void Start()
     {
         base.Start();
+        pool = GameObject.FindWithTag("FactoryPool").GetComponent<AssetPool>();
         _cubePool = GameObject.FindWithTag("CubePool").GetComponent<AssetPool>();
         _spherePool = GameObject.FindWithTag("SpherePool").GetComponent<AssetPool>();
         _tetraPool = GameObject.FindWithTag("TetraPool").GetComponent<AssetPool>();
     }
 
-    new private void Update()
+    protected override void FixedUpdate()
     {
         if (isSelected && Input.GetKeyDown(KeyCode.B))
         {
-            BuildCube();
+            BuildGeneric(_cubePool);
+        }
+        else if (isSelected && Input.GetKeyDown(KeyCode.V))
+        {
+            BuildGeneric(_spherePool);
+        }
+        else if (isSelected && Input.GetKeyDown(KeyCode.C))
+        {
+            BuildGeneric(_tetraPool);
         }
     }
 
-    private void BuildCube()
+    protected override void CheckHealth()
     {
-        Player owner = gameObject.GetComponent<PlayerComponent>().GetPlayer();
-        GameObject newCube = _cubePool.Get();
-        newCube.transform.position = gameObject.transform.position;
-        newCube.transform.rotation = gameObject.transform.rotation;
-        newCube.GetComponent<PlayerComponent>().SetPlayer(owner);
-        _mainCam.GetComponent<PlayerController>().AddPlayerAsset(newCube);
+        if (health <= 0)
+        {
+            pool.Release(gameObject);
+        }
     }
 
-    private void BuildSphere()
+    private void BuildGeneric(AssetPool assetPool)
     {
-
-    }
-
-    private void BuildTetra()
-    {
-
+        Player owner = GetComponent<PlayerComponent>().player;
+        GameObject newAsset = assetPool.Get();
+        newAsset.transform.position = gameObject.transform.position;
+        newAsset.transform.rotation = gameObject.transform.rotation;
+        newAsset.GetComponent<PlayerComponent>().player = owner;
+        _mainCam.GetComponent<PlayerController>().AddPlayerAsset(newAsset);
     }
 }

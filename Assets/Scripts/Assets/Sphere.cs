@@ -2,16 +2,33 @@ using UnityEngine;
 
 public class Sphere : Unit
 {
-    private static float MOVE_SPEED = 5f;
+    protected override AssetPool pool { get; set; }
+    protected override int health { get; set; }
+    protected override float speed { get; set; }
+    protected override int damage { get; set; }
+    protected override int range { get; set; }
 
-    new protected void Start()
+    protected override void Start()
     {
-        _moveSpeed = MOVE_SPEED;
         base.Start();
+        pool = GameObject.FindWithTag("SpherePool").GetComponent<AssetPool>();
     }
 
-    new private void Update()
+    protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
+    }
+
+    protected override void Attack(Asset asset)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            pool.Release(gameObject);
+        }
     }
 }

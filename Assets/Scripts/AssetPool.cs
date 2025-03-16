@@ -4,29 +4,29 @@ using UnityEngine.Pool;
 
 public class AssetPool : MonoBehaviour
 {
-    public GameObject prefab;
+    public GameObject _prefab;
 
-    protected ObjectPool<GameObject> pool;
-    protected bool collectionCheck = true;
-    protected int defaultSize = 10;
-    protected int maxSize = 10;
+    protected ObjectPool<GameObject> _pool;
+    protected bool _collectionCheck = true;
+    protected int _defaultSize = 10;
+    protected int _maxSize = 10;
 
     protected void Awake()
     {
-        pool = new ObjectPool<GameObject>(
+        _pool = new ObjectPool<GameObject>(
             PoolAdd, 
             PoolPop, 
             PoolPush, 
             PoolDestroy, 
-            collectionCheck, 
-            defaultSize, 
-            maxSize
+            _collectionCheck, 
+            _defaultSize, 
+            _maxSize
             );
     }
 
     private GameObject PoolAdd()
     {
-        GameObject newObject = Instantiate(prefab);
+        GameObject newObject = Instantiate(_prefab);
         return newObject;
     }
 
@@ -42,41 +42,41 @@ public class AssetPool : MonoBehaviour
 
     private void PoolDestroy(GameObject obj)
     {
-        //Destroy(t.gameObject);
+        Destroy(obj.gameObject);
     }
 
     public GameObject Get()
     {
-        return pool.Get();
+        return _pool.Get();
     }
 
     public void Release(GameObject obj)
     {
-        pool.Release(obj);
+        _pool.Release(obj);
     }
 
     public void Clear()
     {
-        pool.Clear();
+        _pool.Clear();
     }
 
     public void Dispose()
     {
-        pool.Dispose();
+        _pool.Dispose();
     }
 
     public int CountAll()
     {
-        return pool.CountAll;
+        return _pool.CountAll;
     }
 
     public int CountActive()
     {
-        return pool.CountActive;
+        return _pool.CountActive;
     }
 
     public int CountInactive()
     {
-        return pool.CountInactive;
+        return _pool.CountInactive;
     }
 }

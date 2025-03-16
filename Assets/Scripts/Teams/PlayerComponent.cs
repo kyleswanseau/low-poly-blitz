@@ -2,24 +2,23 @@ using UnityEngine;
 
 public class PlayerComponent : MonoBehaviour
 {
-    private Player? _player = null;
+    private Player _player;
 
-    public Player? GetPlayer()
+    public Player player
     {
-        return _player;
-    }
-
-    public void SetPlayer(Player player)
-    {
-        this._player = player;
-        if (GetComponent<Renderer>())
+        get { return _player; }
+        set
         {
-            GetComponent<Renderer>().material = player.material;
+            _player = value;
+            if (GetComponent<Renderer>())
+            {
+                GetComponent<Renderer>().material = _player.material;
+            }
         }
     }
 
-    public void ClearPlayer()
+    private void Awake()
     {
-        this._player = null;
+        _player = Player.neutralPlayer;
     }
 }

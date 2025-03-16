@@ -3,8 +3,21 @@ using UnityEngine;
 public class Player
 {
     private static int _nextIndex = 0;
+    private Team _team = Team.neutralTeam;
 
-    public Team? team { get; private set; } = null;
+    public static readonly Player neutralPlayer = new Player(Team.neutralTeam);
+
+    public Team team
+    {
+        get { return _team; }
+        set
+        {
+            _team.RemovePlayer(this);
+            _team = value;
+            material = team.material;
+            _team.AddPlayer(this);
+        }
+    }
     public Material material { get; private set; }
     public int index { get; private set; }
 
@@ -14,17 +27,8 @@ public class Player
         _nextIndex++;
     }
 
-    public Player(Material material) : this()
+    public Player(Team team) : this()
     {
-        this.material = material;
-    }
-
-    public void SetTeam(Team team)
-    {
-        if (this.team != team)
-        {
-            this.team = team;
-            team.AddPlayer(this);
-        }
+        this.team = team;
     }
 }
