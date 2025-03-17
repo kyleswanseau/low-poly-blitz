@@ -23,10 +23,10 @@ public class MasterController : MonoBehaviour
         newSphere.GetComponent<PlayerComponent>().player = player1;
         newTetra.GetComponent<PlayerComponent>().player = player2;
         newFactory.GetComponent<PlayerComponent>().player = player1;
-        mainCam.GetComponent<PlayerController>().AddPlayerAsset(newCube);
-        mainCam.GetComponent<PlayerController>().AddPlayerAsset(newSphere);
-        //mainCam.GetComponent<PlayerController>().AddPlayerAsset(newTetra);
-        mainCam.GetComponent<PlayerController>().AddPlayerAsset(newFactory);
+        player1.AddPlayerAsset(newCube);
+        player1.AddPlayerAsset(newSphere);
+        player2.AddPlayerAsset(newTetra);
+        player1.AddPlayerAsset(newFactory);
     }
 
     private void FixedUpdate()

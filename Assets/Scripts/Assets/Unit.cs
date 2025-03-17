@@ -16,7 +16,7 @@ public abstract class Unit : Asset
         _agent.speed = speed;
     }
 
-    protected override void FixedUpdate()
+    protected void Update()
     {
         if (isSelected && Input.GetMouseButtonDown(1))
         {
@@ -27,6 +27,22 @@ public abstract class Unit : Asset
                 MoveTo(hit.point);
             }
         }
+    }
+
+    protected override void FixedUpdate()
+    {
+        /*
+        if (isSelected && Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("Move out");
+            Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                MoveTo(hit.point);
+            }
+        }
+        */
     }
 
     protected abstract void Attack(Asset asset);

@@ -18,7 +18,7 @@ public class Factory : Building
         _tetraPool = GameObject.FindWithTag("TetraPool").GetComponent<AssetPool>();
     }
 
-    protected override void FixedUpdate()
+    private void Update()
     {
         if (isSelected && Input.GetKeyDown(KeyCode.B))
         {
@@ -34,6 +34,24 @@ public class Factory : Building
         }
     }
 
+    protected override void FixedUpdate()
+    {
+        /*
+        if (isSelected && Input.GetKeyDown(KeyCode.B))
+        {
+            BuildGeneric(_cubePool);
+        }
+        else if (isSelected && Input.GetKeyDown(KeyCode.V))
+        {
+            BuildGeneric(_spherePool);
+        }
+        else if (isSelected && Input.GetKeyDown(KeyCode.C))
+        {
+            BuildGeneric(_tetraPool);
+        }
+        */
+    }
+
     protected override void CheckHealth()
     {
         if (health <= 0)
@@ -44,11 +62,11 @@ public class Factory : Building
 
     private void BuildGeneric(AssetPool assetPool)
     {
-        Player owner = GetComponent<PlayerComponent>().player;
+        Player owner = gameObject.GetComponent<PlayerComponent>().player;
         GameObject newAsset = assetPool.Get();
         newAsset.transform.position = gameObject.transform.position;
         newAsset.transform.rotation = gameObject.transform.rotation;
         newAsset.GetComponent<PlayerComponent>().player = owner;
-        _mainCam.GetComponent<PlayerController>().AddPlayerAsset(newAsset);
+        owner.AddPlayerAsset(newAsset);
     }
 }

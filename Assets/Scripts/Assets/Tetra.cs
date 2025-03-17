@@ -4,7 +4,7 @@ public class Tetra : Unit
 {
     protected override AssetPool pool { get; set; }
     protected override int health { get; set; }
-    protected override float speed { get; set; }
+    protected override float speed { get; set; } = 3f;
     protected override int damage { get; set; }
     protected override int range { get; set; }
 

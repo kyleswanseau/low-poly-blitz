@@ -7,11 +7,12 @@ public class PlayerController : MonoBehaviour
     private Vector2? _startPos;
     private Vector2? _endPos;
 
+    private Player player { get; set; }
     private Mouse mouse { get; set; }
-    private List<GameObject> assets { get; set; } = new List<GameObject>();
 
     private void Start()
     {
+        player = GetComponent<PlayerComponent>().player;
         mouse = Mouse.current;
     }
 
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         Vector2? pos = mouse.position.value;
         if (mouse.leftButton.wasReleasedThisFrame)
         {
+            List<GameObject> assets = player.GetPlayerAssets();
             _endPos = pos;
             Rect selection = SomeRect(_startPos.Value, _endPos.Value);
             foreach (GameObject asset in assets)
@@ -47,6 +49,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (mouse.leftButton.wasPressedThisFrame)
         {
+            List<GameObject> assets = player.GetPlayerAssets();
             foreach (GameObject asset in assets)
             {
                 asset.GetComponent<Asset>().setSelected(false);
@@ -55,6 +58,7 @@ public class PlayerController : MonoBehaviour
         }
         if (mouse.leftButton.isPressed)
         {
+            List<GameObject> assets = player.GetPlayerAssets();
             _endPos = pos;
             Rect selection = SomeRect(_startPos.Value, _endPos.Value);
             foreach (GameObject asset in assets)
@@ -72,37 +76,5 @@ public class PlayerController : MonoBehaviour
         float xMax = Mathf.Max(startPos.x, endPos.x);
         float yMax = Mathf.Max(startPos.y, endPos.y);
         return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
-    }
-
-    public void AddPlayerAsset(GameObject asset)
-    {
-        if (asset.GetComponent<PlayerComponent>())
-        {
-            Player player = GetComponent<PlayerComponent>().player;
-            asset.GetComponent<PlayerComponent>().player = player;
-            assets.Add(asset);
-        }
-        else
-        {
-            Debug.LogError("Attempted to add invalid game object to player control.");
-        }
-    }
-
-    public void RemovePlayerAsset(GameObject asset)
-    {
-        if (asset.GetComponent<PlayerComponent>())
-        {
-            asset.GetComponent<PlayerComponent>().player = Player.neutralPlayer;
-            assets.Remove(asset);
-        }
-        else
-        {
-            Debug.LogError("Attempted to add invalid game object to player control.");
-        }
-    }
-
-    public List<GameObject> GetPlayerAssets()
-    {
-        return assets;
     }
 }
