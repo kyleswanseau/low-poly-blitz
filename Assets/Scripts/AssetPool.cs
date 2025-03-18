@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -52,6 +51,7 @@ public class AssetPool : MonoBehaviour
 
     public void Release(GameObject obj)
     {
+        obj.GetComponent<Asset>().Reset();
         _pool.Release(obj);
     }
 

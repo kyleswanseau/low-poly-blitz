@@ -6,8 +6,10 @@ public class Factory : Building
     protected AssetPool _spherePool;
     protected AssetPool _tetraPool;
 
+    protected override float MAX_HEALTH { get; } = 50f;
+
     protected override AssetPool pool { get; set; }
-    protected override int health { get; set; }
+    protected override float health { get; set; } = 50f;
 
     protected override void Start()
     {
@@ -23,15 +25,7 @@ public class Factory : Building
         base.FixedUpdate();
     }
 
-    protected override void CheckHealth()
-    {
-        if (health <= 0)
-        {
-            pool.Release(gameObject);
-        }
-    }
-
-    private void BuildGeneric(AssetPool assetPool)
+    protected void BuildGeneric(AssetPool assetPool)
     {
         Player owner = gameObject.GetComponent<PlayerComponent>().player;
         GameObject newAsset = assetPool.Get();

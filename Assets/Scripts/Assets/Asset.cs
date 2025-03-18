@@ -8,9 +8,11 @@ public abstract class Asset : MonoBehaviour
 
     protected Camera _mainCam;
     protected Light _halo;
-    
+
+    protected abstract float MAX_HEALTH { get; }
+
     protected abstract AssetPool pool { get; set; }
-    protected abstract int health { get; set; }
+    protected abstract float health { get; set; }
 
     protected virtual void Start()
     {
@@ -22,16 +24,28 @@ public abstract class Asset : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        //CheckHealth();
+        
     }
 
-    protected virtual void Damage(int damage)
+    public virtual void Damage(float damage)
     {
         health -= damage;
-        CheckHealth();
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
-    protected abstract void CheckHealth();
+    protected virtual void Die()
+    {
+        pool.Release(gameObject);
+        throw new System.Exception("remove dead assets from selection");
+    }
+
+    public virtual void Reset()
+    {
+        health = MAX_HEALTH;
+    }
 
     public void SetHalo(float intensity)
     {

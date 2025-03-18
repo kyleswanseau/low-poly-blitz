@@ -79,12 +79,41 @@ public class PlayerController : MonoBehaviour
 
     private void CommandAssets()
     {
-        if (mouse.rightButton.wasPressedThisFrame)
+        if (mouse.rightButton.wasPressedThisFrame && Input.GetKey(KeyCode.A))
+        {
+            Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
+            AttackMoveAssets(ray);
+        }
+        else if (mouse.rightButton.wasPressedThisFrame)
         {
             Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
             MoveAssets(ray);
         }
         BuildAssets();
+    }
+
+    private void AttackAssets(Ray ray)
+    {
+        foreach (GameObject asset in selected) if (asset.GetComponent<Unit>())
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+                {
+                    asset.GetComponent<Unit>().Attack(hit.collider.gameObject.GetComponent<Asset>());
+                }
+            }
+    }
+
+    private void AttackMoveAssets(Ray ray)
+    {
+        foreach (GameObject asset in selected) if (asset.GetComponent<Unit>())
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                asset.GetComponent<Unit>().AttackMove(hit.point);
+            }
+        }
     }
 
     private void MoveAssets(Ray ray)
@@ -94,7 +123,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                asset.GetComponent<Unit>().MoveTo(hit.point);
+                asset.GetComponent<Unit>().Move(hit.point);
             }
         }
     }
