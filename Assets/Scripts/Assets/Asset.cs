@@ -2,19 +2,22 @@ using UnityEngine;
 
 public abstract class Asset : MonoBehaviour
 {
+    public const float IDLE_INTENSITY = 0f;
+    public const float HOVER_INTENSITY = 20f;
+    public const float SELECT_INTENSITY = 100f;
+
     protected Camera _mainCam;
+    protected Light _halo;
     
     protected abstract AssetPool pool { get; set; }
     protected abstract int health { get; set; }
-    public bool isHovered { get; set; } = false;
-    public bool isSelected { get; set; } = false;
 
     protected virtual void Start()
     {
         _mainCam = Camera.main;
-        Light halo = gameObject.GetComponentInChildren<Light>();
-        halo.intensity = 100;
-        halo.enabled = isSelected;
+        _halo = gameObject.GetComponentInChildren<Light>();
+        _halo.intensity = 0;
+        _halo.enabled = false;
     }
 
     protected virtual void FixedUpdate()
@@ -30,35 +33,10 @@ public abstract class Asset : MonoBehaviour
 
     protected abstract void CheckHealth();
 
-    public Vector3 getPositionInCam()
+    public void SetHalo(float intensity)
     {
-        return _mainCam.WorldToScreenPoint(gameObject.transform.position);
-    }
-
-    public void setHovered(bool hovered)
-    {
-
-        isHovered = hovered;
-        Light? halo = gameObject.GetComponentInChildren<Light>();
-        if (halo != null)
-        {
-            halo.intensity = 20;
-            halo.enabled = isHovered;
-        }
-    }
-
-    public void setSelected(bool selected)
-    {
-        isSelected = selected;
-        if (isSelected)
-        {
-            setHovered(false);
-        }
-        Light? halo = gameObject.GetComponentInChildren<Light>();
-        if (halo != null)
-        {
-            halo.intensity = 100;
-            halo.enabled = isSelected;
-        }
+        Light halo = GetComponentInChildren<Light>();
+        halo.intensity = intensity;
+        halo.enabled = (intensity > 0);
     }
 }

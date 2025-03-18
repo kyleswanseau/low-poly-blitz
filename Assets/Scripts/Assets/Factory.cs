@@ -18,38 +18,9 @@ public class Factory : Building
         _tetraPool = GameObject.FindWithTag("TetraPool").GetComponent<AssetPool>();
     }
 
-    private void Update()
-    {
-        if (isSelected && Input.GetKeyDown(KeyCode.B))
-        {
-            BuildGeneric(_cubePool);
-        }
-        else if (isSelected && Input.GetKeyDown(KeyCode.V))
-        {
-            BuildGeneric(_spherePool);
-        }
-        else if (isSelected && Input.GetKeyDown(KeyCode.C))
-        {
-            BuildGeneric(_tetraPool);
-        }
-    }
-
     protected override void FixedUpdate()
     {
-        /*
-        if (isSelected && Input.GetKeyDown(KeyCode.B))
-        {
-            BuildGeneric(_cubePool);
-        }
-        else if (isSelected && Input.GetKeyDown(KeyCode.V))
-        {
-            BuildGeneric(_spherePool);
-        }
-        else if (isSelected && Input.GetKeyDown(KeyCode.C))
-        {
-            BuildGeneric(_tetraPool);
-        }
-        */
+        base.FixedUpdate();
     }
 
     protected override void CheckHealth()
@@ -68,5 +39,20 @@ public class Factory : Building
         newAsset.transform.rotation = gameObject.transform.rotation;
         newAsset.GetComponent<PlayerComponent>().player = owner;
         owner.AddPlayerAsset(newAsset);
+    }
+
+    public void BuildCube()
+    {
+        BuildGeneric(_cubePool);
+    }
+
+    public void BuildSphere()
+    {
+        BuildGeneric(_spherePool);
+    }
+
+    public void BuildTetra()
+    {
+        BuildGeneric(_tetraPool);
     }
 }

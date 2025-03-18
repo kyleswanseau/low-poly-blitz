@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class Player
     private Team _team = Team.neutralTeam;
 
     public static readonly Player neutralPlayer = new Player(Team.neutralTeam);
-    private List<GameObject> assets { get; set; } = new List<GameObject>();
+    public List<GameObject> assets { get; private set; } = new List<GameObject>();
 
     public Team team
     {
@@ -59,10 +58,5 @@ public class Player
         {
             Debug.LogError("Attempted to add invalid game object to player control.");
         }
-    }
-
-    public List<GameObject> GetPlayerAssets()
-    {
-        return assets;
     }
 }
