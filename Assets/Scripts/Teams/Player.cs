@@ -7,7 +7,8 @@ public class Player
     private Team _team = Team.neutralTeam;
 
     public static readonly Player neutralPlayer = new Player(Team.neutralTeam);
-    public List<GameObject> assets { get; private set; } = new List<GameObject>();
+    public PlayerController controller { get; set; }
+    public List<Asset> assets { get; private set; } = new List<Asset>();
 
     public Team team
     {
@@ -34,7 +35,7 @@ public class Player
         this.team = team;
     }
 
-    public void AddPlayerAsset(GameObject asset)
+    public void AddPlayerAsset(Asset asset)
     {
         if (asset.GetComponent<PlayerComponent>())
         {
@@ -43,11 +44,11 @@ public class Player
         }
         else
         {
-            Debug.LogError("Attempted to add invalid game object to player control.");
+            Debug.LogError("Attempted to add invalid asset to player control.");
         }
     }
 
-    public void RemovePlayerAsset(GameObject asset)
+    public void RemovePlayerAsset(Asset asset)
     {
         if (asset.GetComponent<PlayerComponent>())
         {
@@ -56,7 +57,12 @@ public class Player
         }
         else
         {
-            Debug.LogError("Attempted to add invalid game object to player control.");
+            Debug.LogError("Attempted to add invalid asset to player control.");
         }
+    }
+
+    public void setController(PlayerController controller)
+    {
+        this.controller = controller;
     }
 }

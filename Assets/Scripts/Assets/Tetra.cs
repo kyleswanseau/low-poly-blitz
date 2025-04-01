@@ -5,12 +5,14 @@ public class Tetra : Unit
     protected override float MAX_HEALTH { get; } = 10f;
     protected override float SPEED { get; } = 3f;
     protected override float DAMAGE { get; } = 10f;
-    protected override float COOLDOWN { get; } = 15f;
-    protected override float RANGE { get; } = 2f;
+    protected override float COOLDOWN { get; } = 5f;
+    protected override float RANGE { get; } = 10f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 5f;
-    public override Asset? target { get; set; }
+    protected override float cooldown { get; set; } = 5f;
+    protected override Asset? attackTarget { get; set; }
+    protected override Vector3? moveTarget { get; set; }
 
     protected override void Start()
     {

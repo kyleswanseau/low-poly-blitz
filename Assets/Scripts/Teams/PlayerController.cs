@@ -6,16 +6,20 @@ public class PlayerController : MonoBehaviour
 {
     private Vector2? _startPos;
     private Vector2? _endPos;
+    private CommandbarBehaviour _commandbar;
+    private InfobarBehaviour _infobar;
+    private ResourcebarBehaviour _resourcebar;
 
     private Player player { get; set; }
     private Camera mainCam { get; set; }
     private Mouse mouse { get; set; }
-    public List<GameObject> hovered { get; private set; } = new List<GameObject>();
-    public List<GameObject> selected { get; private set; } = new List<GameObject>();
+    public List<Asset> hovered { get; private set; } = new List<Asset>();
+    public List<Asset> selected { get; private set; } = new List<Asset>();
 
     private void Start()
     {
         player = GetComponent<PlayerComponent>().player;
+        player.setController(this);
         mainCam = Camera.main;
         mouse = Mouse.current;
     }
@@ -42,7 +46,7 @@ public class PlayerController : MonoBehaviour
         Vector2? pos = mouse.position.value;
         if (mouse.leftButton.wasReleasedThisFrame)
         {
-            selected = new List<GameObject>(hovered);
+            selected = new List<Asset>(hovered);
             selected.ForEach(a => a.GetComponent<Asset>().SetHalo(Asset.SELECT_INTENSITY));
             hovered.Clear();
             _startPos = _endPos = null;
@@ -57,7 +61,7 @@ public class PlayerController : MonoBehaviour
         {
             _endPos = pos;
             Rect selection = SomeRect(_startPos.Value, _endPos.Value);
-            foreach (GameObject asset in player.assets)
+            foreach (Asset asset in player.assets)
             {
                 Vector2 assetPos = mainCam.WorldToScreenPoint(asset.transform.position);
                 if (selection.Contains(assetPos))
@@ -94,43 +98,43 @@ public class PlayerController : MonoBehaviour
 
     private void AttackAssets(Ray ray)
     {
-        foreach (GameObject asset in selected) if (asset.GetComponent<Unit>())
+        foreach (Asset asset in selected) if (asset.GetComponent<Unit>())
             {
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
                 {
-                    asset.GetComponent<Unit>().Attack(hit.collider.gameObject.GetComponent<Asset>());
+                    asset.GetComponent<Unit>().AttackCmd(hit.collider.gameObject.GetComponent<Asset>());
                 }
             }
     }
 
     private void AttackMoveAssets(Ray ray)
     {
-        foreach (GameObject asset in selected) if (asset.GetComponent<Unit>())
+        foreach (Asset asset in selected) if (asset.GetComponent<Unit>())
         {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                asset.GetComponent<Unit>().AttackMove(hit.point);
+                asset.GetComponent<Unit>().AttackMoveCmd(hit.point);
             }
         }
     }
 
     private void MoveAssets(Ray ray)
     {
-        foreach (GameObject asset in selected) if (asset.GetComponent<Unit>())
+        foreach (Asset asset in selected) if (asset.GetComponent<Unit>())
         {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                asset.GetComponent<Unit>().Move(hit.point);
+                asset.GetComponent<Unit>().MoveCmd(hit.point);
             }
         }
     }
 
     private void BuildAssets()
     {
-        foreach (GameObject asset in selected) if (asset.GetComponent<Factory>())
+        foreach (Asset asset in selected) if (asset.GetComponent<Factory>())
         {
             if (Input.GetKeyDown(KeyCode.B))
             {
@@ -145,6 +149,12 @@ public class PlayerController : MonoBehaviour
                 asset.GetComponent<Factory>().BuildTetra();
             }
         }
+    }
+
+    public void RemoveAsset(Asset asset)
+    {
+        hovered.Remove(asset);
+        selected.Remove(asset);
     }
 
     Rect SomeRect(Vector2 startPos, Vector2 endPos)

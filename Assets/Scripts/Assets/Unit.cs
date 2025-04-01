@@ -12,8 +12,10 @@ public abstract class Unit : Asset
     protected abstract float COOLDOWN { get; }
     protected abstract float RANGE { get; }
 
-    public abstract Asset? target { get; set; }
-    protected bool ignoreEnemies { get; set; } = false;
+    protected abstract float cooldown { get; set; }
+    protected abstract Asset? attackTarget { get; set; }
+    protected abstract Vector3? moveTarget { get; set; }
+    protected bool chaseEnemies { get; set; } = true;
 
     protected override void Start()
     {
@@ -25,89 +27,125 @@ public abstract class Unit : Asset
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (ignoreEnemies)
+        List<Asset> enemies = NearbyEnemies();
+        Asset? closestEnemy = null;
+        if (enemies.Any())
         {
-            if (null != target)
+            Dictionary<Asset, float> assetDistance =                            // Funny way to map asset to distance
+                enemies.ToDictionary(
+                    key => key,
+                    value => Vector3.Distance(
+                        gameObject.transform.position,
+                        value.gameObject.transform.position));
+            closestEnemy =
+                (from kvp in assetDistance
+                 orderby kvp.Value ascending
+                 select kvp.Key).First();
+        }
+        if (chaseEnemies)
+        {
+            if (null != attackTarget)
             {
-                // Has target
-                Attack();
+                // Attack
+                moveTarget = attackTarget.transform.position;
+            }
+            else if (enemies.Any())
+            {
+                // AttackMove / Stop and has enemies in range
+                attackTarget = closestEnemy;
+                moveTarget = closestEnemy.transform.position;
             }
             else
             {
-                // No target
-                // Nothing to see here, move along now
+                // AttackMove / Stop and does not have enemies in range
+                // Keep state
             }
         }
         else
         {
-            List<Asset> enemies = NearbyEnemies();
+            // Move
+            if (Vector3.Distance(transform.position, moveTarget.Value) <= 0.5f)
+            {
+                StopCmd();
+            }
             if (enemies.Any())
             {
-                // Has enemies in range
-                Dictionary<Asset, float> assetDistance                          // Funny way to map asset to distance
-                    = enemies.ToDictionary(
-                        key => key,
-                        value => Vector3.Distance(
-                            gameObject.transform.position,
-                            value.gameObject.transform.position));
-                Attack((from kvp in assetDistance
-                        orderby kvp.Value ascending
-                        select kvp.Key).First());
-            }
-            else
-            {
-                // No enemies in range
-                // Nothing to see here, move along now
+                attackTarget = closestEnemy;
             }
         }
-        if (_agent.remainingDistance <= 0.5f)
+        Attack();
+        Move();
+        if (cooldown < COOLDOWN)
         {
-            Stop();
+            cooldown += Time.fixedDeltaTime;
         }
     }
 
     protected virtual void Attack()
     {
-        if (!target.gameObject.activeInHierarchy)
+        if (null != attackTarget)
         {
-            target = null;
+            if (!attackTarget.gameObject.activeInHierarchy)
+            {
+                attackTarget = null;
+            }
+            if (CanAttackTarget() && cooldown >= COOLDOWN)
+            {
+                attackTarget.Damage(DAMAGE);
+                cooldown = 0f;
+            }
+            if (chaseEnemies)
+            {
+                moveTarget = attackTarget.transform.position;
+            }
+            if (!attackTarget.gameObject.activeInHierarchy)
+            {
+                if (chaseEnemies)
+                {
+                    StopCmd();
+                }
+                else
+                {
+                    attackTarget = null;
+                }
+            }
         }
-        if (null != target)
+    }
+
+    protected virtual void Move()
+    {
+        if (null != moveTarget)
         {
-            ignoreEnemies = true;
-            if (CanAttackTarget())
-            {
-                target.Damage(DAMAGE);
-            }
-            else
-            {
-                Move(target.transform.position);
-            }
+            _agent.SetDestination(moveTarget.Value);
         }
     }
 
-    public virtual void Attack(Asset asset)
+    public virtual void AttackCmd(Asset asset)
     {
-        target = asset;
-        Attack();
+        attackTarget = asset;
+        moveTarget = asset.transform.position;
+        chaseEnemies = true;
     }
 
-    public virtual void AttackMove(Vector3 position)
+    public virtual void AttackMoveCmd(Vector3 position)
     {
-        Move(position);
-        ignoreEnemies = false;
+        attackTarget = null;
+        moveTarget = position;
+        chaseEnemies = true;
     }
 
-    public virtual void Move(Vector3 position)
+    public virtual void MoveCmd(Vector3 position)
     {
-        ignoreEnemies = true;
-        _agent.SetDestination(position);
+        attackTarget = null;
+        moveTarget = position;
+        chaseEnemies = false;
     }
 
-    public virtual void Stop()
+    public virtual void StopCmd()
     {
-        ignoreEnemies = false;
-        target = null;
+        attackTarget = null;
+        moveTarget = null;
+        chaseEnemies = true;
         _agent.ResetPath();
     }
 
@@ -115,7 +153,7 @@ public abstract class Unit : Asset
     {
         return (Vector3.Distance(
             gameObject.transform.position,
-            target.gameObject.transform.position) <= RANGE);
+            attackTarget.gameObject.transform.position) <= RANGE);
     }
 
     protected List<Asset> NearbyEnemies()

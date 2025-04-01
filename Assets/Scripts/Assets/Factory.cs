@@ -28,7 +28,7 @@ public class Factory : Building
     protected void BuildGeneric(AssetPool assetPool)
     {
         Player owner = gameObject.GetComponent<PlayerComponent>().player;
-        GameObject newAsset = assetPool.Get();
+        Asset newAsset = assetPool.Get();
         newAsset.transform.position = gameObject.transform.position;
         newAsset.transform.rotation = gameObject.transform.rotation;
         newAsset.GetComponent<PlayerComponent>().player = owner;

@@ -10,7 +10,9 @@ public class Sphere : Unit
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 5f;
-    public override Asset? target { get; set; }
+    protected override float cooldown { get; set; } = 10f;
+    protected override Asset? attackTarget { get; set; }
+    protected override Vector3? moveTarget { get; set; }
 
     protected override void Start()
     {

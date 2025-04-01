@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class MasterController : MonoBehaviour
 {
-    public GameObject cube;
-    public GameObject sphere;
-    public GameObject tetra;
-    public GameObject factory;
+    public Asset cube;
+    public Asset sphere;
+    public Asset tetra;
+    public Asset factory;
 
     private void Start()
     {
@@ -14,10 +14,10 @@ public class MasterController : MonoBehaviour
         Camera mainCam = Camera.main;
         mainCam.GetComponent<PlayerComponent>().player = player1;
 
-        GameObject newCube = Instantiate(cube);
-        GameObject newSphere = Instantiate(sphere);
-        GameObject newTetra = Instantiate(tetra);
-        GameObject newFactory = Instantiate(factory);
+        Asset newCube = Instantiate(cube);
+        Asset newSphere = Instantiate(sphere);
+        Asset newTetra = Instantiate(tetra);
+        Asset newFactory = Instantiate(factory);
 
         newCube.GetComponent<PlayerComponent>().player = player1;
         newSphere.GetComponent<PlayerComponent>().player = player1;

@@ -30,7 +30,7 @@ public abstract class Asset : MonoBehaviour
     public virtual void Damage(float damage)
     {
         health -= damage;
-        if (health <= 0)
+        if (health <= 0f)
         {
             Die();
         }
@@ -38,8 +38,8 @@ public abstract class Asset : MonoBehaviour
 
     protected virtual void Die()
     {
-        pool.Release(gameObject);
-        throw new System.Exception("remove dead assets from selection");
+        GetComponent<PlayerComponent>().player.controller.RemoveAsset(this);
+        pool.Release(this);
     }
 
     public virtual void Reset()

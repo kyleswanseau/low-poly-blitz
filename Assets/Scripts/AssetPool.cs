@@ -3,16 +3,16 @@ using UnityEngine.Pool;
 
 public class AssetPool : MonoBehaviour
 {
-    public GameObject _prefab;
+    public Asset _prefab;
 
-    protected ObjectPool<GameObject> _pool;
+    protected ObjectPool<Asset> _pool;
     protected bool _collectionCheck = true;
     protected int _defaultSize = 10;
     protected int _maxSize = 10;
 
     protected void Awake()
     {
-        _pool = new ObjectPool<GameObject>(
+        _pool = new ObjectPool<Asset>(
             PoolAdd, 
             PoolPop, 
             PoolPush, 
@@ -23,35 +23,35 @@ public class AssetPool : MonoBehaviour
             );
     }
 
-    private GameObject PoolAdd()
+    private Asset PoolAdd()
     {
-        GameObject newObject = Instantiate(_prefab);
+        Asset newObject = Instantiate(_prefab);
         return newObject;
     }
 
-    private void PoolPop(GameObject obj)
+    private void PoolPop(Asset obj)
     {
-        obj.SetActive(true);
+        obj.gameObject.SetActive(true);
     }
 
-    private void PoolPush(GameObject obj)
+    private void PoolPush(Asset obj)
     {
-        obj.SetActive(false);
+        obj.gameObject.SetActive(false);
     }
 
-    private void PoolDestroy(GameObject obj)
+    private void PoolDestroy(Asset obj)
     {
         Destroy(obj.gameObject);
     }
 
-    public GameObject Get()
+    public Asset Get()
     {
         return _pool.Get();
     }
 
-    public void Release(GameObject obj)
+    public void Release(Asset obj)
     {
-        obj.GetComponent<Asset>().Reset();
+        obj.Reset();
         _pool.Release(obj);
     }
 
