@@ -22,6 +22,11 @@ public class PlayerController : MonoBehaviour
         player.setController(this);
         mainCam = Camera.main;
         mouse = Mouse.current;
+        _commandbar = FindFirstObjectByType<CommandbarBehaviour>();
+        _infobar = FindFirstObjectByType<InfobarBehaviour>();
+        _resourcebar = FindFirstObjectByType<ResourcebarBehaviour>();
+        _commandbar.gameObject.SetActive(false);
+        _infobar.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -39,6 +44,18 @@ public class PlayerController : MonoBehaviour
             selection.yMax = Screen.height - selection.yMax;
             GUI.DrawTexture(selection, Texture2D.grayTexture);
         }
+        if (selected.Count > 0)
+        {
+            _commandbar.gameObject.SetActive(true);
+            _infobar.gameObject.SetActive(true);
+            _infobar.setUnitName(selectedToString());
+        }
+        else
+        {
+            _commandbar.gameObject.SetActive(false);
+            _infobar.gameObject.SetActive(false);
+        }
+        _resourcebar.setPolyCount(player.team.poly);
     }
 
     private void SelectAssets()
@@ -164,5 +181,54 @@ public class PlayerController : MonoBehaviour
         float xMax = Mathf.Max(startPos.x, endPos.x);
         float yMax = Mathf.Max(startPos.y, endPos.y);
         return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+    }
+
+    public string selectedToString()
+    {
+        int cubeCount = 0;
+        int sphereCount = 0;
+        int tetraCount = 0;
+        int factoryCount = 0;
+        int pylonCount = 0;
+        int mineCount = 0;
+        foreach (Asset asset in selected)
+        {
+            switch (asset)
+            {
+                case Cube:
+                    {
+                        cubeCount++;
+                        break;
+                    }
+                case Sphere:
+                    {
+                        sphereCount++;
+                        break;
+                    }
+                case Tetra:
+                    {
+                        tetraCount++;
+                        break;
+                    }
+                case Factory:
+                    {
+                        factoryCount++;
+                        break;
+                    }
+                case Pylon:
+                    {
+                        pylonCount++;
+                        break;
+                    }
+                case Mine:
+                    {
+                        mineCount++;
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+        return ("Cube x" + cubeCount + ", Sphere x" + sphereCount + ", Tetra x" + tetraCount);
     }
 }

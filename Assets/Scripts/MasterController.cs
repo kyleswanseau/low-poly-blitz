@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class MasterController : MonoBehaviour
 {
-    public Asset cube;
-    public Asset sphere;
-    public Asset tetra;
-    public Asset factory;
+    [SerializeField] private Asset cube;
+    [SerializeField] private Asset sphere;
+    [SerializeField] private Asset tetra;
+    [SerializeField] private Asset factory;
+    [SerializeField] private Asset mine;
+    [SerializeField] private Asset pylon;
 
     private void Start()
     {
@@ -14,6 +16,7 @@ public class MasterController : MonoBehaviour
         Camera mainCam = Camera.main;
         mainCam.GetComponent<PlayerComponent>().player = player1;
 
+        /*
         Asset newCube = Instantiate(cube);
         Asset newSphere = Instantiate(sphere);
         Asset newTetra = Instantiate(tetra);
@@ -27,6 +30,10 @@ public class MasterController : MonoBehaviour
         player1.AddPlayerAsset(newSphere);
         player2.AddPlayerAsset(newTetra);
         player1.AddPlayerAsset(newFactory);
+        */
+        Asset newMine = Instantiate(mine);
+        newMine.GetComponent<PlayerComponent>().player = player1;
+        player1.AddPlayerAsset(newMine);
     }
 
     private void FixedUpdate()

@@ -10,6 +10,7 @@ public class Team
     public static readonly Team neutralTeam = new Team(Resources.Load<Material>("Materials/Gray"));
     public Material material { get; private set; }
     public int index { get; private set; }
+    public float poly { get; set; } = 0f;
 
     private Team()
     {

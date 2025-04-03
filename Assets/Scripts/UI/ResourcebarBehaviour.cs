@@ -1,16 +1,17 @@
+using TMPro;
 using UnityEngine;
 
 public class ResourcebarBehaviour : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private TextMeshProUGUI _polyCount;
+
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void setPolyCount(float count)
     {
-        
+        _polyCount.SetText(count.ToString());
     }
 }
