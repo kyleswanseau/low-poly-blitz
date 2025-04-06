@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -41,7 +42,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        SelectAssets();
+        Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.layer != 5)
+        {
+            SelectAssets();
+        }
         CommandAssets();
     }
 
@@ -80,6 +86,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (mouse.leftButton.wasPressedThisFrame)
         {
+            Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+            {
+                hovered.Add(hit.collider.gameObject.GetComponent<Asset>());
+            }
             selected.ForEach(a => a.GetComponent<Asset>().SetHalo(Asset.IDLE_INTENSITY));
             selected.Clear();
             _startPos = pos;
@@ -90,19 +102,22 @@ public class PlayerController : MonoBehaviour
             Rect selection = SomeRect(_startPos.Value, _endPos.Value);
             foreach (Asset asset in player.assets)
             {
-                Vector2 assetPos = mainCam.WorldToScreenPoint(asset.transform.position);
-                if (selection.Contains(assetPos))
+                if (asset is Unit)
                 {
-                    if (!hovered.Contains(asset))
+                    Vector2 assetPos = mainCam.WorldToScreenPoint(asset.transform.position);
+                    if (selection.Contains(assetPos))
                     {
-                        hovered.Add(asset);
-                        asset.GetComponent<Asset>().SetHalo(Asset.HOVER_INTENSITY);
+                        if (!hovered.Contains(asset))
+                        {
+                            hovered.Add(asset);
+                            asset.GetComponent<Asset>().SetHalo(Asset.HOVER_INTENSITY);
+                        }
                     }
-                }
-                else if (hovered.Contains(asset))
-                {
-                    hovered.Remove(asset);
-                    asset.GetComponent<Asset>().SetHalo(Asset.IDLE_INTENSITY);
+                    else if (hovered.Contains(asset))
+                    {
+                        hovered.Remove(asset);
+                        asset.GetComponent<Asset>().SetHalo(Asset.IDLE_INTENSITY);
+                    }
                 }
             }
         }
@@ -130,19 +145,47 @@ public class PlayerController : MonoBehaviour
         {
             SetCommand(Command.None);
         }
+        if (mouse.rightButton.wasPressedThisFrame)
+        {
+            Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
+            switch (_command)
+            {
+                case Command.Move:
+                    {
+                        MoveAssets(ray);
+                        break;
+                    }
+                case Command.AttackMove:
+                    {
+                        AttackMoveAssets(ray);
+                        break;
+                    }
+                case Command.Attack:
+                    {
+                        AttackAssets(ray);
+                        break;
+                    }
+                case Command.Stop:
+                    {
+                        StopAssets();
+                        break;
+                    }
+                default:
+                    {
+                        RaycastHit hit;
+                        if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+                        {
+                            AttackAssets(ray);
+                        }
+                        else if (Physics.Raycast(ray, out hit))
+                        {
+                            MoveAssets(ray);
+                        }
+                        break;
+                    }
+            }
+        }
 
-        /*
-        if (mouse.rightButton.wasPressedThisFrame && Input.GetKey(KeyCode.A))
-        {
-            Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
-            AttackMoveAssets(ray);
-        }
-        else if (mouse.rightButton.wasPressedThisFrame)
-        {
-            Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
-            MoveAssets(ray);
-        }
-        */
         BuildAssets();
         
     }
@@ -152,9 +195,41 @@ public class PlayerController : MonoBehaviour
         _command = command;
     }
 
+    private void MoveAssets(Ray ray)
+    {
+        foreach (Asset asset in selected)
+        {
+            if (asset.GetComponent<Unit>())
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    asset.GetComponent<Unit>().MoveCmd(hit.point);
+                }
+            }
+        }
+    }
+
+    private void AttackMoveAssets(Ray ray)
+    {
+        foreach (Asset asset in selected)
+        {
+            if (asset.GetComponent<Unit>())
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    asset.GetComponent<Unit>().AttackMoveCmd(hit.point);
+                }
+            }
+        }
+    }
+
     private void AttackAssets(Ray ray)
     {
-        foreach (Asset asset in selected) if (asset.GetComponent<Unit>())
+        foreach (Asset asset in selected)
+        {
+            if (asset.GetComponent<Unit>())
             {
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
@@ -162,28 +237,16 @@ public class PlayerController : MonoBehaviour
                     asset.GetComponent<Unit>().AttackCmd(hit.collider.gameObject.GetComponent<Asset>());
                 }
             }
-    }
-
-    private void AttackMoveAssets(Ray ray)
-    {
-        foreach (Asset asset in selected) if (asset.GetComponent<Unit>())
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                asset.GetComponent<Unit>().AttackMoveCmd(hit.point);
-            }
         }
     }
 
-    private void MoveAssets(Ray ray)
+    private void StopAssets()
     {
-        foreach (Asset asset in selected) if (asset.GetComponent<Unit>())
+        foreach (Asset asset in selected)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (asset.GetComponent<Unit>())
             {
-                asset.GetComponent<Unit>().MoveCmd(hit.point);
+                asset.GetComponent<Unit>().StopCmd();
             }
         }
     }
