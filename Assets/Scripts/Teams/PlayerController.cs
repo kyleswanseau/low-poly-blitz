@@ -2,6 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum Command
+{
+    Move,
+    AttackMove,
+    Attack,
+    Stop,
+    None
+}
+
 public class PlayerController : MonoBehaviour
 {
     private Vector2? _startPos;
@@ -9,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private CommandbarBehaviour _commandbar;
     private InfobarBehaviour _infobar;
     private ResourcebarBehaviour _resourcebar;
+    private Command _command = Command.None;
 
     private Player player { get; set; }
     private Camera mainCam { get; set; }
@@ -100,6 +110,28 @@ public class PlayerController : MonoBehaviour
 
     private void CommandAssets()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            SetCommand(Command.AttackMove);
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            SetCommand(Command.Stop);
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            SetCommand(Command.Move);
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            SetCommand(Command.Attack);
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SetCommand(Command.None);
+        }
+
+        /*
         if (mouse.rightButton.wasPressedThisFrame && Input.GetKey(KeyCode.A))
         {
             Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
@@ -110,7 +142,14 @@ public class PlayerController : MonoBehaviour
             Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
             MoveAssets(ray);
         }
+        */
         BuildAssets();
+        
+    }
+
+    public void SetCommand(Command command)
+    {
+        _command = command;
     }
 
     private void AttackAssets(Ray ray)
