@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -24,7 +25,9 @@ public class PlayerController : MonoBehaviour
     private Player player { get; set; }
     private Camera mainCam { get; set; }
     private Mouse mouse { get; set; }
-    public List<Asset> hovered { get; private set; } = new List<Asset>();
+    public Asset? hoveredSingle { get; private set; } = null;
+    public Asset? selectedSingle { get; private set; } = null;
+    public List<Asset> hoveredMultiple { get; private set; } = new List<Asset>();
     public List<Asset> selected { get; private set; } = new List<Asset>();
 
     private void Start()
@@ -77,22 +80,43 @@ public class PlayerController : MonoBehaviour
     private void SelectAssets()
     {
         Vector2? pos = mouse.position.value;
+        Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
+        RaycastHit hit;
         if (mouse.leftButton.wasReleasedThisFrame)
         {
-            selected = new List<Asset>(hovered);
-            selected.ForEach(a => a.GetComponent<Asset>().SetHalo(Asset.SELECT_INTENSITY));
-            hovered.Clear();
+            if (null != hoveredSingle && hoveredMultiple.Count <= 0)
+            {
+                // Click selection
+                if (Physics.Raycast(ray, out hit) &&
+                    hit.collider.gameObject.GetComponent<Asset>() &&
+                    hit.collider.gameObject.GetComponent<Asset>() == hoveredSingle)
+                {
+                    selected.Clear();
+                    selected.Add(hoveredSingle);
+                    hoveredSingle = null;
+                }
+            }
+            else
+            {
+                // Drag selection
+                selected = new List<Asset>(hoveredMultiple);
+                hoveredMultiple.Clear();
+            }
+            selected.ForEach(a => a.SetHalo(Asset.SELECT_INTENSITY));
             _startPos = _endPos = null;
         }
         else if (mouse.leftButton.wasPressedThisFrame)
         {
-            Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+            if (null != hoveredSingle)
             {
-                hovered.Add(hit.collider.gameObject.GetComponent<Asset>());
+                // Click selection
             }
-            selected.ForEach(a => a.GetComponent<Asset>().SetHalo(Asset.IDLE_INTENSITY));
+            else if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+            {
+                // Drag selection
+                hoveredMultiple.Add(hit.collider.gameObject.GetComponent<Asset>());
+            }
+            selected.ForEach(a => a.SetHalo(Asset.IDLE_INTENSITY));
             selected.Clear();
             _startPos = pos;
         }
@@ -107,19 +131,39 @@ public class PlayerController : MonoBehaviour
                     Vector2 assetPos = mainCam.WorldToScreenPoint(asset.transform.position);
                     if (selection.Contains(assetPos))
                     {
-                        if (!hovered.Contains(asset))
+                        if (!hoveredMultiple.Contains(asset))
                         {
-                            hovered.Add(asset);
-                            asset.GetComponent<Asset>().SetHalo(Asset.HOVER_INTENSITY);
+                            hoveredMultiple.Add(asset);
+                            asset.SetHalo(Asset.HOVER_INTENSITY);
                         }
                     }
-                    else if (hovered.Contains(asset))
+                    else if (hoveredMultiple.Contains(asset))
                     {
-                        hovered.Remove(asset);
-                        asset.GetComponent<Asset>().SetHalo(Asset.IDLE_INTENSITY);
+                        hoveredMultiple.Remove(asset);
+                        asset.SetHalo(Asset.IDLE_INTENSITY);
                     }
                 }
             }
+        }
+        else if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+        {
+            if (null != hoveredSingle && !selected.Contains(hoveredSingle))
+            {
+                hoveredSingle.SetHalo(Asset.IDLE_INTENSITY);
+            }
+            hoveredSingle = hit.collider.gameObject.GetComponent<Asset>();
+            if (!selected.Contains(hoveredSingle))
+            {
+                hoveredSingle.SetHalo(Asset.HOVER_INTENSITY);
+            }
+        }
+        else if (null != hoveredSingle)
+        {
+            if (!selected.Contains(hoveredSingle))
+            {
+                hoveredSingle.SetHalo(Asset.IDLE_INTENSITY);
+            }
+            hoveredSingle = null;
         }
     }
 
@@ -272,7 +316,7 @@ public class PlayerController : MonoBehaviour
 
     public void RemoveAsset(Asset asset)
     {
-        hovered.Remove(asset);
+        hoveredMultiple.Remove(asset);
         selected.Remove(asset);
     }
 
@@ -287,6 +331,7 @@ public class PlayerController : MonoBehaviour
 
     public string selectedToString()
     {
+        string output = "";
         int cubeCount = 0;
         int sphereCount = 0;
         int tetraCount = 0;
@@ -331,6 +376,30 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-        return ("Cube x" + cubeCount + ", Sphere x" + sphereCount + ", Tetra x" + tetraCount);
+        if (cubeCount > 0)
+        {
+            output += "Cube x" + cubeCount + " ";
+        }
+        if (sphereCount > 0)
+        {
+            output += "Sphere x" + sphereCount + " ";
+        }
+        if (tetraCount > 0)
+        {
+            output += "Tetra x" + tetraCount + " ";
+        }
+        if (factoryCount > 0)
+        {
+            output += "Factory x" + factoryCount + " ";
+        }
+        if (pylonCount > 0)
+        {
+            output += "Pylon x" + pylonCount + " ";
+        }
+        if (mineCount > 0)
+        {
+            output += "Mine x" + mineCount + " ";
+        }
+        return output;
     }
 }

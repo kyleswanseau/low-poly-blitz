@@ -7,8 +7,8 @@ public class AssetPool : MonoBehaviour
 
     protected ObjectPool<Asset> _pool;
     protected bool _collectionCheck = true;
-    protected int _defaultSize = 10;
-    protected int _maxSize = 10;
+    protected int _defaultSize = 50;
+    protected int _maxSize = 50;
 
     protected void Awake()
     {
