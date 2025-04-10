@@ -231,7 +231,6 @@ public class PlayerController : MonoBehaviour
         }
 
         BuildAssets();
-        
     }
 
     public void SetCommand(Command command)
@@ -301,15 +300,15 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.B))
             {
-                asset.GetComponent<Factory>().BuildCube();
+                asset.GetComponent<Factory>().BuildCubes();
             }
             else if (Input.GetKeyDown(KeyCode.V))
             {
-                asset.GetComponent<Factory>().BuildSphere();
+                asset.GetComponent<Factory>().BuildSpheres();
             }
             else if (Input.GetKeyDown(KeyCode.C))
             {
-                asset.GetComponent<Factory>().BuildTetra();
+                asset.GetComponent<Factory>().BuildTetras();
             }
         }
     }

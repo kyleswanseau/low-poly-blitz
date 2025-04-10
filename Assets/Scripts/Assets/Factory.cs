@@ -2,11 +2,23 @@ using UnityEngine;
 
 public class Factory : Building
 {
+    protected enum EUnits
+    {
+        Cube,
+        Sphere,
+        Tetra,
+        None
+    }
+
     protected AssetPool _cubePool;
     protected AssetPool _spherePool;
     protected AssetPool _tetraPool;
+    protected EUnits _unit = EUnits.None;
+    protected float _progress = 0f;
 
     protected override float MAX_HEALTH { get; } = 50f;
+    public override float BUILD_COST { get; } = 50f;
+    public override float BUILD_TIME { get; } = 20f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 50f;
@@ -23,9 +35,44 @@ public class Factory : Building
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (_unit != EUnits.None)
+        {
+            switch (_unit)
+            {
+                case EUnits.Cube:
+                    {
+                        if (_progress >= _cubePool._prefab.BUILD_TIME)
+                        {
+                            BuildGeneric(_cubePool);
+                            _progress = 0f;
+                        }
+                        break;
+                    }
+                case EUnits.Sphere: 
+                    {
+                        if (_progress >= _spherePool._prefab.BUILD_TIME)
+                        {
+                            BuildGeneric(_spherePool);
+                            _progress = 0f;
+                        }
+                        break;
+                    }
+                case EUnits.Tetra:
+                    {
+                        if (_progress >= _tetraPool._prefab.BUILD_TIME)
+                        {
+                            BuildGeneric(_tetraPool);
+                            _progress = 0f;
+                        }
+                        break;
+                    }
+            }
+            _progress += Time.fixedDeltaTime;
+            Debug.Log(_progress);
+        }
     }
 
-    protected void BuildGeneric(AssetPool assetPool)
+    protected Asset BuildGeneric(AssetPool assetPool)
     {
         Player owner = gameObject.GetComponent<PlayerComponent>().player;
         Asset newAsset = assetPool.Get();
@@ -33,20 +80,28 @@ public class Factory : Building
         newAsset.transform.rotation = gameObject.transform.rotation;
         newAsset.GetComponent<PlayerComponent>().player = owner;
         owner.AddPlayerAsset(newAsset);
+        if (newAsset is Unit newUnit)
+        {
+            newUnit.MoveCmd(Vector3.MoveTowards(transform.position, Vector3.zero, 3f));
+        }
+        return newAsset;
     }
 
-    public void BuildCube()
+    public void BuildCubes()
     {
-        BuildGeneric(_cubePool);
+        _progress = 0f;
+        _unit = EUnits.Cube;
     }
 
-    public void BuildSphere()
+    public void BuildSpheres()
     {
-        BuildGeneric(_spherePool);
+        _progress = 0f;
+        _unit = EUnits.Sphere;
     }
 
-    public void BuildTetra()
+    public void BuildTetras()
     {
-        BuildGeneric(_tetraPool);
+        _progress = 0f;
+        _unit = EUnits.Tetra;
     }
 }

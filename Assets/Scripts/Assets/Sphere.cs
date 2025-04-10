@@ -7,6 +7,8 @@ public class Sphere : Unit
     protected override float DAMAGE { get; } = 5f;
     protected override float COOLDOWN { get; } = 10f;
     protected override float RANGE { get; } = 1f;
+    public override float BUILD_COST { get; } = 10f;
+    public override float BUILD_TIME { get; } = 5f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 5f;

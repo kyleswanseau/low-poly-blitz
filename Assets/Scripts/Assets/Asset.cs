@@ -10,6 +10,8 @@ public abstract class Asset : MonoBehaviour
     protected Light _halo;
 
     protected abstract float MAX_HEALTH { get; }
+    public abstract float BUILD_COST { get; }
+    public abstract float BUILD_TIME { get; }
 
     protected abstract AssetPool pool { get; set; }
     protected abstract float health { get; set; }
