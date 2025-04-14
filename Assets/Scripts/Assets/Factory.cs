@@ -68,7 +68,6 @@ public class Factory : Building
                     }
             }
             _progress += Time.fixedDeltaTime;
-            Debug.Log(_progress);
         }
     }
 

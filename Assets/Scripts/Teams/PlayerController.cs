@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum Command
 {
@@ -45,10 +47,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.layer != 5)
+        if (
+            (_commandbar.isActiveAndEnabled && _commandbar.rect.Contains(mouse.position.value)) ||
+            (_infobar.isActiveAndEnabled && _infobar.rect.Contains(mouse.position.value)) ||
+            (_resourcebar.isActiveAndEnabled && _resourcebar.rect.Contains(mouse.position.value))
+        )
         {
+            Debug.Log("Is UI");
+        }
+        else
+        {
+            Debug.Log("Not UI");
             SelectAssets();
         }
         CommandAssets();
