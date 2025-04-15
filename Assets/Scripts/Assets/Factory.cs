@@ -23,6 +23,7 @@ public class Factory : Building
     protected override float health { get; set; } = 50f;
     public float progress { get; private set; } = 1f;
     public float maxProgress { get; private set; } = 1f;
+    public Vector3? rallyPos { get; private set; } = null;
 
     protected override void Start()
     {
@@ -57,6 +58,19 @@ public class Factory : Building
         progress += Time.fixedDeltaTime;
     }
 
+    public void MoveCmd(Vector3 position)
+    {
+        rallyPos = position;
+    }
+
+    public void StopCmd()
+    {
+        _unit = EUnits.None;
+        progress = 1f;
+        maxProgress = 1f;
+        rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 3f);
+    }
+
     protected Asset BuildGeneric(AssetPool assetPool)
     {
         Player owner = gameObject.GetComponent<PlayerComponent>().player;
@@ -65,31 +79,35 @@ public class Factory : Building
         newAsset.transform.rotation = gameObject.transform.rotation;
         newAsset.GetComponent<PlayerComponent>().player = owner;
         owner.AddPlayerAsset(newAsset);
+        if (null == rallyPos)
+        {
+            rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 3f);
+        }
         if (newAsset is Unit newUnit)
         {
-            newUnit.MoveCmd(Vector3.MoveTowards(transform.position, Vector3.zero, 3f));
+            newUnit.MoveCmd(rallyPos.Value);
         }
         return newAsset;
     }
 
     public void BuildCubes()
     {
-        progress = 0f;
         _unit = EUnits.Cube;
+        progress = 0f;
         maxProgress = _cubePool._prefab.BUILD_TIME;
     }
 
     public void BuildSpheres()
     {
-        progress = 0f;
         _unit = EUnits.Sphere;
+        progress = 0f;
         maxProgress = _spherePool._prefab.BUILD_TIME;
     }
 
     public void BuildTetras()
     {
-        progress = 0f;
         _unit = EUnits.Tetra;
+        progress = 0f;
         maxProgress = _tetraPool._prefab.BUILD_TIME;
     }
 }

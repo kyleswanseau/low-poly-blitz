@@ -7,6 +7,8 @@ public class CommandbarBehaviour : MonoBehaviour
     [SerializeField] private Button _attackMoveButton;
     [SerializeField] private Button _stopButton;
     [SerializeField] private Button _attackButton;
+    [SerializeField] private Button _rallyButton;
+    [SerializeField] private Button _facstopButton;
     private PlayerController _controller;
 
     public Rect rect { get; private set; }
@@ -22,24 +24,52 @@ public class CommandbarBehaviour : MonoBehaviour
         Vector2 min = Vector2.Scale(rt.anchorMin, new Vector2(Screen.width, Screen.height));
         Vector2 max = Vector2.Scale(rt.anchorMax, new Vector2(Screen.width, Screen.height));
         rect = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        SwitchGUI(0);
     }
 
-    private void Move()
+    public void SwitchGUI(int mode)
+    {
+        switch (mode)
+        {
+            case 1:
+                _moveButton.gameObject.SetActive(true);
+                _attackMoveButton.gameObject.SetActive(true);
+                _stopButton.gameObject.SetActive(true);
+                _attackButton.gameObject.SetActive(true);
+                _rallyButton.gameObject.SetActive(false);
+                _facstopButton.gameObject.SetActive(false);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                _moveButton.gameObject.SetActive(false);
+                _attackMoveButton.gameObject.SetActive(false);
+                _stopButton.gameObject.SetActive(false);
+                _attackButton.gameObject.SetActive(false);
+                _rallyButton.gameObject.SetActive(true);
+                _facstopButton.gameObject.SetActive(true);
+                break;
+        }
+    }
+
+    public void Move()
     {
         _controller.SetCommand(Command.Move);
     }
 
-    private void AttackMove()
+    public void AttackMove()
     {
         _controller.SetCommand(Command.AttackMove);
     }
 
-    private void Stop()
+    public void Stop()
     {
         _controller.SetCommand(Command.Stop);
     }
 
-    private void Attack()
+    public void Attack()
     {
         _controller.SetCommand(Command.Attack);
     }

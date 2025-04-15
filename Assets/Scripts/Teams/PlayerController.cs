@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -118,6 +119,26 @@ public class PlayerController : MonoBehaviour
                 hoveredMultiple.Clear();
             }
             selected.ForEach(a => a.SetHalo(Asset.SELECT_INTENSITY));
+            if (selected.Any(asset => asset is Factory))
+            {
+                _commandbar.SwitchGUI(1);
+                _infobar.SwitchGUI(1);
+            }
+            else if (selected.Any(asset => asset is Pylon))
+            {
+                _commandbar.SwitchGUI(2);
+                _infobar.SwitchGUI(2);
+            }
+            else if (selected.Any(asset => asset is Mine))
+            {
+                _commandbar.SwitchGUI(3);
+                _infobar.SwitchGUI(3);
+            }
+            else
+            {
+                _commandbar.SwitchGUI(0);
+                _infobar.SwitchGUI(0);
+            }
             _startPos = _endPos = null;
         }
         else if (mouse.leftButton.wasPressedThisFrame)
@@ -188,9 +209,9 @@ public class PlayerController : MonoBehaviour
         {
             SetCommand(Command.AttackMove);
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.S) || _command == Command.Stop)
         {
-            SetCommand(Command.Stop);
+            StopAssets();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
@@ -234,7 +255,6 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-
         BuildAssets();
     }
 
@@ -253,6 +273,14 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     asset.GetComponent<Unit>().MoveCmd(hit.point);
+                }
+            }
+            if (asset is Factory factory)
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    factory.GetComponent<Factory>().MoveCmd(hit.point);
                 }
             }
         }
@@ -296,6 +324,10 @@ public class PlayerController : MonoBehaviour
             {
                 asset.GetComponent<Unit>().StopCmd();
             }
+            if (asset is Factory factory)
+            {
+                factory.GetComponent<Factory>().StopCmd();
+            }
         }
     }
 
@@ -305,7 +337,7 @@ public class PlayerController : MonoBehaviour
         {
             if (asset is Factory factory)
             {
-                if (Input.GetKeyDown(KeyCode.B))
+                if (Input.GetKeyDown(KeyCode.C))
                 {
                     factory.BuildCubes();
                 }
@@ -313,7 +345,7 @@ public class PlayerController : MonoBehaviour
                 {
                     factory.BuildSpheres();
                 }
-                else if (Input.GetKeyDown(KeyCode.C))
+                else if (Input.GetKeyDown(KeyCode.B))
                 {
                     factory.BuildTetras();
                 }
