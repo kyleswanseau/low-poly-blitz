@@ -14,7 +14,6 @@ public class Factory : Building
     protected AssetPool _spherePool;
     protected AssetPool _tetraPool;
     protected EUnits _unit = EUnits.None;
-    protected float _progress = 0f;
 
     protected override float MAX_HEALTH { get; } = 50f;
     public override float BUILD_COST { get; } = 50f;
@@ -22,6 +21,8 @@ public class Factory : Building
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 50f;
+    public float progress { get; private set; } = 1f;
+    public float maxProgress { get; private set; } = 1f;
 
     protected override void Start()
     {
@@ -35,40 +36,25 @@ public class Factory : Building
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (_unit != EUnits.None)
+        if (_unit != EUnits.None && progress >= maxProgress)
         {
             switch (_unit)
             {
                 case EUnits.Cube:
-                    {
-                        if (_progress >= _cubePool._prefab.BUILD_TIME)
-                        {
-                            BuildGeneric(_cubePool);
-                            _progress = 0f;
-                        }
-                        break;
-                    }
+                    BuildGeneric(_cubePool);
+                    progress = 0f;
+                    break;
                 case EUnits.Sphere: 
-                    {
-                        if (_progress >= _spherePool._prefab.BUILD_TIME)
-                        {
-                            BuildGeneric(_spherePool);
-                            _progress = 0f;
-                        }
-                        break;
-                    }
+                    BuildGeneric(_spherePool);
+                    progress = 0f;
+                    break;
                 case EUnits.Tetra:
-                    {
-                        if (_progress >= _tetraPool._prefab.BUILD_TIME)
-                        {
-                            BuildGeneric(_tetraPool);
-                            _progress = 0f;
-                        }
-                        break;
-                    }
+                    BuildGeneric(_tetraPool);
+                    progress = 0f;
+                    break;
             }
-            _progress += Time.fixedDeltaTime;
         }
+        progress += Time.fixedDeltaTime;
     }
 
     protected Asset BuildGeneric(AssetPool assetPool)
@@ -88,19 +74,22 @@ public class Factory : Building
 
     public void BuildCubes()
     {
-        _progress = 0f;
+        progress = 0f;
         _unit = EUnits.Cube;
+        maxProgress = _cubePool._prefab.BUILD_TIME;
     }
 
     public void BuildSpheres()
     {
-        _progress = 0f;
+        progress = 0f;
         _unit = EUnits.Sphere;
+        maxProgress = _spherePool._prefab.BUILD_TIME;
     }
 
     public void BuildTetras()
     {
-        _progress = 0f;
+        progress = 0f;
         _unit = EUnits.Tetra;
+        maxProgress = _tetraPool._prefab.BUILD_TIME;
     }
 }

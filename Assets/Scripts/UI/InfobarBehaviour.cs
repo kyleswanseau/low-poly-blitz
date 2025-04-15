@@ -1,9 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InfobarBehaviour : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _unitName;
+    [SerializeField] private Slider _slider;
+    private Factory? _factory;
 
     public Rect rect { get; private set; }
 
@@ -15,8 +18,22 @@ public class InfobarBehaviour : MonoBehaviour
         rect = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
     }
 
+    private void OnGUI()
+    {
+        if (null != _factory)
+        {
+            _slider.value = _factory.progress;
+        }
+    }
+
     public void setUnitName(string name)
     {
         _unitName.SetText(name);
+    }
+
+    public void setFactory(Factory factory)
+    {
+        _factory = factory;
+        _slider.maxValue = _factory.maxProgress;
     }
 }

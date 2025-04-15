@@ -893,6 +893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitName: {fileID: 1266937802}
+  _slider: {fileID: 1596171400}
 --- !u!1 &302933118
 GameObject:
   m_ObjectHideFlags: 0

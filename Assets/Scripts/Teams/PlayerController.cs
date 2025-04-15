@@ -53,11 +53,10 @@ public class PlayerController : MonoBehaviour
             (_resourcebar.isActiveAndEnabled && _resourcebar.rect.Contains(mouse.position.value))
         )
         {
-            Debug.Log("Is UI");
+            
         }
         else
         {
-            Debug.Log("Not UI");
             SelectAssets();
         }
         CommandAssets();
@@ -77,6 +76,13 @@ public class PlayerController : MonoBehaviour
             _commandbar.gameObject.SetActive(true);
             _infobar.gameObject.SetActive(true);
             _infobar.setUnitName(selectedToString());
+            foreach (Asset asset in selected)
+            {
+                if (asset is Factory factory)
+                {
+                    _infobar.setFactory(factory);
+                }
+            }
         }
         else
         {
@@ -204,38 +210,28 @@ public class PlayerController : MonoBehaviour
             switch (_command)
             {
                 case Command.Move:
-                    {
-                        MoveAssets(ray);
-                        break;
-                    }
+                    MoveAssets(ray);
+                    break;
                 case Command.AttackMove:
-                    {
-                        AttackMoveAssets(ray);
-                        break;
-                    }
+                    AttackMoveAssets(ray);
+                    break;
                 case Command.Attack:
+                    AttackAssets(ray);
+                    break;
+                case Command.Stop:
+                    StopAssets();
+                    break;
+                default:
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
                     {
                         AttackAssets(ray);
-                        break;
                     }
-                case Command.Stop:
+                    else if (Physics.Raycast(ray, out hit))
                     {
-                        StopAssets();
-                        break;
+                        MoveAssets(ray);
                     }
-                default:
-                    {
-                        RaycastHit hit;
-                        if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
-                        {
-                            AttackAssets(ray);
-                        }
-                        else if (Physics.Raycast(ray, out hit))
-                        {
-                            MoveAssets(ray);
-                        }
-                        break;
-                    }
+                    break;
             }
         }
 
@@ -305,19 +301,22 @@ public class PlayerController : MonoBehaviour
 
     private void BuildAssets()
     {
-        foreach (Asset asset in selected) if (asset.GetComponent<Factory>())
+        foreach (Asset asset in selected)
         {
-            if (Input.GetKeyDown(KeyCode.B))
+            if (asset is Factory factory)
             {
-                asset.GetComponent<Factory>().BuildCubes();
-            }
-            else if (Input.GetKeyDown(KeyCode.V))
-            {
-                asset.GetComponent<Factory>().BuildSpheres();
-            }
-            else if (Input.GetKeyDown(KeyCode.C))
-            {
-                asset.GetComponent<Factory>().BuildTetras();
+                if (Input.GetKeyDown(KeyCode.B))
+                {
+                    factory.BuildCubes();
+                }
+                else if (Input.GetKeyDown(KeyCode.V))
+                {
+                    factory.BuildSpheres();
+                }
+                else if (Input.GetKeyDown(KeyCode.C))
+                {
+                    factory.BuildTetras();
+                }
             }
         }
     }
