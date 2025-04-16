@@ -40,8 +40,13 @@ public class CommandbarBehaviour : MonoBehaviour
                 _facstopButton.gameObject.SetActive(false);
                 break;
             case 2:
-                break;
             case 3:
+                _moveButton.gameObject.SetActive(false);
+                _attackMoveButton.gameObject.SetActive(false);
+                _stopButton.gameObject.SetActive(false);
+                _attackButton.gameObject.SetActive(false);
+                _rallyButton.gameObject.SetActive(false);
+                _facstopButton.gameObject.SetActive(false);
                 break;
             default:
                 _moveButton.gameObject.SetActive(false);
@@ -56,21 +61,21 @@ public class CommandbarBehaviour : MonoBehaviour
 
     public void Move()
     {
-        _controller.SetCommand(Command.Move);
+        _controller.SetCommand(ECommand.Move);
     }
 
     public void AttackMove()
     {
-        _controller.SetCommand(Command.AttackMove);
+        _controller.SetCommand(ECommand.AttackMove);
     }
 
     public void Stop()
     {
-        _controller.SetCommand(Command.Stop);
+        _controller.SetCommand(ECommand.Stop);
     }
 
     public void Attack()
     {
-        _controller.SetCommand(Command.Attack);
+        _controller.SetCommand(ECommand.Attack);
     }
 }

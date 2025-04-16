@@ -8,6 +8,9 @@ public class InfobarBehaviour : MonoBehaviour
     [SerializeField] private Button _cubeButton;
     [SerializeField] private Button _sphereButton;
     [SerializeField] private Button _tetraButton;
+    [SerializeField] private Button _factoryButton;
+    [SerializeField] private Button _pylonButton;
+    [SerializeField] private Button _mineButton;
     [SerializeField] private TextMeshProUGUI _progressText;
     [SerializeField] private Slider _progressSlider;
     private Factory? _factory = null;
@@ -38,17 +41,30 @@ public class InfobarBehaviour : MonoBehaviour
                 _cubeButton.gameObject.SetActive(true);
                 _sphereButton.gameObject.SetActive(true);
                 _tetraButton.gameObject.SetActive(true);
+                _factoryButton.gameObject.SetActive(false);
+                _pylonButton.gameObject.SetActive(false);
+                _mineButton.gameObject.SetActive(false);
                 _progressText.gameObject.SetActive(true);
                 _progressSlider.gameObject.SetActive(true);
                 break;
             case 2:
+                _cubeButton.gameObject.SetActive(false);
+                _sphereButton.gameObject.SetActive(false);
+                _tetraButton.gameObject.SetActive(false);
+                _factoryButton.gameObject.SetActive(true);
+                _pylonButton.gameObject.SetActive(true);
+                _mineButton.gameObject.SetActive(true);
+                _progressText.gameObject.SetActive(false);
+                _progressSlider.gameObject.SetActive(false);
                 break;
             case 3:
-                break;
             default:
                 _cubeButton.gameObject.SetActive(false);
                 _sphereButton.gameObject.SetActive(false);
                 _tetraButton.gameObject.SetActive(false);
+                _factoryButton.gameObject.SetActive(false);
+                _pylonButton.gameObject.SetActive(false);
+                _mineButton.gameObject.SetActive(false);
                 _progressText.gameObject.SetActive(false);
                 _progressSlider.gameObject.SetActive(false);
                 break;

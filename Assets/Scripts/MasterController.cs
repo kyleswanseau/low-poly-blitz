@@ -31,9 +31,9 @@ public class MasterController : MonoBehaviour
         player2.AddPlayerAsset(newTetra);
         player1.AddPlayerAsset(newFactory);
         */
-        Asset newFactory = Instantiate(factory);
-        newFactory.GetComponent<PlayerComponent>().player = player1;
-        player1.AddPlayerAsset(newFactory);
+        Asset newPylon = Instantiate(pylon);
+        newPylon.GetComponent<PlayerComponent>().player = player1;
+        player1.AddPlayerAsset(newPylon);
     }
 
     private void FixedUpdate()

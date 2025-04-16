@@ -14,6 +14,7 @@ public class Mine : Building
     protected override void Start()
     {
         base.Start();
+        pool = GameObject.FindWithTag("MinePool").GetComponent<AssetPool>();
     }
 
     protected override void FixedUpdate()

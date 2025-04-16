@@ -1,18 +1,22 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
-public enum Command
+public enum ECommand
 {
     Move,
     AttackMove,
     Attack,
     Stop,
+    None
+}
+
+public enum EBuild
+{
+    Factory,
+    Pylon,
+    Mine,
     None
 }
 
@@ -23,7 +27,8 @@ public class PlayerController : MonoBehaviour
     private CommandbarBehaviour _commandbar;
     private InfobarBehaviour _infobar;
     private ResourcebarBehaviour _resourcebar;
-    private Command _command = Command.None;
+    private ECommand _command = ECommand.None;
+    private EBuild _buildBuilding = EBuild.None;
 
     private Player player { get; set; }
     private Camera mainCam { get; set; }
@@ -207,58 +212,131 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            SetCommand(Command.AttackMove);
+            SetCommand(ECommand.AttackMove);
         }
-        else if (Input.GetKeyDown(KeyCode.S) || _command == Command.Stop)
+        else if (Input.GetKeyDown(KeyCode.S) || _command == ECommand.Stop)
         {
             StopAssets();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            SetCommand(Command.Move);
+            SetCommand(ECommand.Move);
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
-            SetCommand(Command.Attack);
+            SetCommand(ECommand.Attack);
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SetCommand(Command.None);
+            SetCommand(ECommand.None);
         }
         if (mouse.rightButton.wasPressedThisFrame)
         {
             Ray ray = mainCam.ScreenPointToRay(mouse.position.value);
-            switch (_command)
+            if (selected.Any(asset => asset is Pylon))
             {
-                case Command.Move:
-                    MoveAssets(ray);
-                    break;
-                case Command.AttackMove:
-                    AttackMoveAssets(ray);
-                    break;
-                case Command.Attack:
-                    AttackAssets(ray);
-                    break;
-                case Command.Stop:
-                    StopAssets();
-                    break;
-                default:
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+                RaycastHit hit;
+                Physics.Raycast(ray, out hit);
+                foreach (Asset asset in selected)
+                {
+                    if (asset is Pylon pylon)
                     {
-                        AttackAssets(ray);
+                        switch (_buildBuilding)
+                        {
+                            case EBuild.Factory:
+
+                                pylon.BuildFactory(hit.point);
+                                _buildBuilding = EBuild.None;
+                                break;
+                            case EBuild.Pylon:
+                                pylon.BuildPylon(hit.point);
+                                _buildBuilding = EBuild.None;
+                                break;
+                            case EBuild.Mine:
+                                pylon.BuildMine(hit.point);
+                                _buildBuilding = EBuild.None;
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                    else if (Physics.Raycast(ray, out hit))
-                    {
-                        MoveAssets(ray);
-                    }
-                    break;
+                }
             }
+            else
+            {
+                switch (_command)
+                {
+                    case ECommand.Move:
+                        MoveAssets(ray);
+                        break;
+                    case ECommand.AttackMove:
+                        AttackMoveAssets(ray);
+                        break;
+                    case ECommand.Attack:
+                        AttackAssets(ray);
+                        break;
+                    case ECommand.Stop:
+                        StopAssets();
+                        break;
+                    default:
+                        RaycastHit hit;
+                        if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Asset>())
+                        {
+                            AttackAssets(ray);
+                        }
+                        else if (Physics.Raycast(ray, out hit))
+                        {
+                            MoveAssets(ray);
+                        }
+                        break;
+                }
+            }    
         }
         BuildAssets();
     }
 
-    public void SetCommand(Command command)
+    private void BuildAssets()
+    {
+        foreach (Asset asset in selected)
+        {
+            if (asset is Factory factory)
+            {
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    factory.BuildCubes();
+                }
+                else if (Input.GetKeyDown(KeyCode.V))
+                {
+                    factory.BuildSpheres();
+                }
+                else if (Input.GetKeyDown(KeyCode.B))
+                {
+                    factory.BuildTetras();
+                }
+            }
+            if (asset is Pylon pylon)
+            {
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    _buildBuilding = EBuild.Factory;
+                }
+                else if (Input.GetKeyDown(KeyCode.V))
+                {
+                    _buildBuilding = EBuild.Pylon;
+                }
+                else if (Input.GetKeyDown(KeyCode.B))
+                {
+                    _buildBuilding = EBuild.Mine;
+                }
+                else if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    _buildBuilding = EBuild.None;
+                }
+            }
+        }
+    }
+
+    public void SetCommand(ECommand command)
     {
         _command = command;
     }
@@ -327,28 +405,6 @@ public class PlayerController : MonoBehaviour
             if (asset is Factory factory)
             {
                 factory.GetComponent<Factory>().StopCmd();
-            }
-        }
-    }
-
-    private void BuildAssets()
-    {
-        foreach (Asset asset in selected)
-        {
-            if (asset is Factory factory)
-            {
-                if (Input.GetKeyDown(KeyCode.C))
-                {
-                    factory.BuildCubes();
-                }
-                else if (Input.GetKeyDown(KeyCode.V))
-                {
-                    factory.BuildSpheres();
-                }
-                else if (Input.GetKeyDown(KeyCode.B))
-                {
-                    factory.BuildTetras();
-                }
             }
         }
     }
