@@ -9,7 +9,8 @@ public abstract class Asset : MonoBehaviour
     protected Camera _mainCam;
     protected Light _halo;
 
-    protected abstract float MAX_HEALTH { get; }
+    public abstract float MAX_HEALTH { get; }
+    public abstract float RANGE { get; }
     public abstract float BUILD_COST { get; }
     public abstract float BUILD_TIME { get; }
 
@@ -54,5 +55,10 @@ public abstract class Asset : MonoBehaviour
         Light halo = GetComponentInChildren<Light>();
         halo.intensity = intensity;
         halo.enabled = (intensity > 0);
+    }
+
+    public void SetRing(bool set)
+    {
+        GetComponentInChildren<RangeRing>().SetVisible(set);
     }
 }

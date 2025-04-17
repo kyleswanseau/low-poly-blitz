@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Sphere : Unit
 {
-    protected override float MAX_HEALTH { get; } = 5f;
-    protected override float SPEED { get; } = 10f;
-    protected override float DAMAGE { get; } = 5f;
-    protected override float COOLDOWN { get; } = 10f;
-    protected override float RANGE { get; } = 1f;
+    public override float MAX_HEALTH { get; } = 5f;
+    public override float SPEED { get; } = 10f;
+    public override float DAMAGE { get; } = 5f;
+    public override float COOLDOWN { get; } = 10f;
+    public override float RANGE { get; } = 1f;
     public override float BUILD_COST { get; } = 10f;
     public override float BUILD_TIME { get; } = 5f;
 

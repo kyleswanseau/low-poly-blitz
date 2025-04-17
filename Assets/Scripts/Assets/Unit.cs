@@ -7,10 +7,9 @@ public abstract class Unit : Asset
 {
     protected NavMeshAgent _agent;
 
-    protected abstract float SPEED { get; }
-    protected abstract float DAMAGE { get; }
-    protected abstract float COOLDOWN { get; }
-    protected abstract float RANGE { get; }
+    public abstract float SPEED { get; }
+    public abstract float DAMAGE { get; }
+    public abstract float COOLDOWN { get; }
 
     protected abstract float cooldown { get; set; }
     protected abstract Asset? attackTarget { get; set; }

@@ -123,7 +123,8 @@ public class PlayerController : MonoBehaviour
                 selected = new List<Asset>(hoveredMultiple);
                 hoveredMultiple.Clear();
             }
-            selected.ForEach(a => a.SetHalo(Asset.SELECT_INTENSITY));
+            selected.ForEach(s => s.SetHalo(Asset.SELECT_INTENSITY));
+            selected.ForEach(s => s.SetRing(true));
             if (selected.Any(asset => asset is Factory))
             {
                 _commandbar.SwitchGUI(1);
@@ -157,7 +158,8 @@ public class PlayerController : MonoBehaviour
                 // Drag selection
                 hoveredMultiple.Add(hit.collider.gameObject.GetComponent<Asset>());
             }
-            selected.ForEach(a => a.SetHalo(Asset.IDLE_INTENSITY));
+            selected.ForEach(s => s.SetHalo(Asset.IDLE_INTENSITY));
+            selected.ForEach(s => s.SetRing(false));
             selected.Clear();
             _startPos = pos;
         }
@@ -239,7 +241,8 @@ public class PlayerController : MonoBehaviour
                 Physics.Raycast(ray, out hit);
                 foreach (Asset asset in selected)
                 {
-                    if (asset is Pylon pylon)
+                    if (asset is Pylon pylon &&
+                        Vector3.Distance(pylon.transform.position, hit.point) <= pylon.RANGE)
                     {
                         switch (_buildBuilding)
                         {

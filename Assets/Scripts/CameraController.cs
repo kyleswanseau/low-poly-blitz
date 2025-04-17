@@ -6,14 +6,12 @@ public class CameraController : MonoBehaviour
     private static float zoomSpeed = 10f;
     private static float moveSpeed = 50f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         MoveCamera();
     }

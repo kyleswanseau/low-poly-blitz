@@ -4,7 +4,8 @@ public class Mine : Building
 {
     [SerializeField] protected static readonly float INCOME = 5f;
 
-    protected override float MAX_HEALTH { get; } = 20f;
+    public override float MAX_HEALTH { get; } = 20f;
+    public override float RANGE { get; } = 10f;
     public override float BUILD_COST { get; } = 20f;
     public override float BUILD_TIME { get; } = 10f;
 

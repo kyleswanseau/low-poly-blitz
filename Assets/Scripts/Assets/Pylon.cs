@@ -6,8 +6,8 @@ public class Pylon : Building
     protected AssetPool _pylonPool;
     protected AssetPool _minePool;
 
-    protected override float MAX_HEALTH { get; } = 20f;
-    protected float RANGE { get; } = 10f;
+    public override float MAX_HEALTH { get; } = 20f;
+    public override float RANGE { get; } = 20f;
     public override float BUILD_COST { get; } = 10f;
     public override float BUILD_TIME { get; } = 5f;
 
@@ -40,6 +40,7 @@ public class Pylon : Building
 
     public void BuildFactory(Vector3 position)
     {
+        position += new Vector3(0f, 0.05f, 0f);
         BuildGeneric(_factoryPool, position);
     }
 
@@ -51,6 +52,7 @@ public class Pylon : Building
 
     public void BuildMine(Vector3 position)
     {
+        position += new Vector3(0f, 1f, 0f);
         BuildGeneric(_minePool, position);
     }
 }

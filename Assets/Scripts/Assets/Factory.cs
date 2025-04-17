@@ -15,7 +15,8 @@ public class Factory : Building
     protected AssetPool _tetraPool;
     protected EUnits _unit = EUnits.None;
 
-    protected override float MAX_HEALTH { get; } = 50f;
+    public override float MAX_HEALTH { get; } = 50f;
+    public override float RANGE { get; } = 5f;
     public override float BUILD_COST { get; } = 50f;
     public override float BUILD_TIME { get; } = 20f;
 
