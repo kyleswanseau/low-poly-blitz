@@ -2,12 +2,9 @@ using UnityEngine;
 
 public abstract class Asset : MonoBehaviour
 {
-    public const float IDLE_INTENSITY = 0f;
-    public const float HOVER_INTENSITY = 20f;
-    public const float SELECT_INTENSITY = 100f;
-
     protected Camera _mainCam;
-    protected Light _halo;
+    protected SelectRing _halo;
+    protected RangeRing _range;
 
     public abstract float MAX_HEALTH { get; }
     public abstract float RANGE { get; }
@@ -20,9 +17,10 @@ public abstract class Asset : MonoBehaviour
     protected virtual void Start()
     {
         _mainCam = Camera.main;
-        _halo = gameObject.GetComponentInChildren<Light>();
-        _halo.intensity = 0;
-        _halo.enabled = false;
+        _halo = GetComponentInChildren<SelectRing>();
+        _range = GetComponentInChildren<RangeRing>();
+        SetHalo(EIntensity.Idle);
+        SetRange(false);
     }
 
     protected virtual void FixedUpdate()
@@ -50,15 +48,13 @@ public abstract class Asset : MonoBehaviour
         health = MAX_HEALTH;
     }
 
-    public void SetHalo(float intensity)
+    public void SetHalo(EIntensity intensity)
     {
-        Light halo = GetComponentInChildren<Light>();
-        halo.intensity = intensity;
-        halo.enabled = (intensity > 0);
+        _halo.SetIntensity(intensity);
     }
 
-    public void SetRing(bool set)
+    public void SetRange(bool set)
     {
-        GetComponentInChildren<RangeRing>().SetVisible(set);
+        _range.SetVisible(set);
     }
 }

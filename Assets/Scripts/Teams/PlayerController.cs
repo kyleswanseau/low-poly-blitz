@@ -123,8 +123,8 @@ public class PlayerController : MonoBehaviour
                 selected = new List<Asset>(hoveredMultiple);
                 hoveredMultiple.Clear();
             }
-            selected.ForEach(s => s.SetHalo(Asset.SELECT_INTENSITY));
-            selected.ForEach(s => s.SetRing(true));
+            selected.ForEach(s => s.SetHalo(EIntensity.Select));
+            selected.ForEach(s => s.SetRange(true));
             if (selected.Any(asset => asset is Factory))
             {
                 _commandbar.SwitchGUI(1);
@@ -158,8 +158,8 @@ public class PlayerController : MonoBehaviour
                 // Drag selection
                 hoveredMultiple.Add(hit.collider.gameObject.GetComponent<Asset>());
             }
-            selected.ForEach(s => s.SetHalo(Asset.IDLE_INTENSITY));
-            selected.ForEach(s => s.SetRing(false));
+            selected.ForEach(s => s.SetHalo(EIntensity.Idle));
+            selected.ForEach(s => s.SetRange(false));
             selected.Clear();
             _startPos = pos;
         }
@@ -177,13 +177,13 @@ public class PlayerController : MonoBehaviour
                         if (!hoveredMultiple.Contains(asset))
                         {
                             hoveredMultiple.Add(asset);
-                            asset.SetHalo(Asset.HOVER_INTENSITY);
+                            asset.SetHalo(EIntensity.Hover);
                         }
                     }
                     else if (hoveredMultiple.Contains(asset))
                     {
                         hoveredMultiple.Remove(asset);
-                        asset.SetHalo(Asset.IDLE_INTENSITY);
+                        asset.SetHalo(EIntensity.Idle);
                     }
                 }
             }
@@ -192,19 +192,19 @@ public class PlayerController : MonoBehaviour
         {
             if (null != hoveredSingle && !selected.Contains(hoveredSingle))
             {
-                hoveredSingle.SetHalo(Asset.IDLE_INTENSITY);
+                hoveredSingle.SetHalo(EIntensity.Idle);
             }
             hoveredSingle = hit.collider.gameObject.GetComponent<Asset>();
             if (!selected.Contains(hoveredSingle))
             {
-                hoveredSingle.SetHalo(Asset.HOVER_INTENSITY);
+                hoveredSingle.SetHalo(EIntensity.Hover);
             }
         }
         else if (null != hoveredSingle)
         {
             if (!selected.Contains(hoveredSingle))
             {
-                hoveredSingle.SetHalo(Asset.IDLE_INTENSITY);
+                hoveredSingle.SetHalo(EIntensity.Idle);
             }
             hoveredSingle = null;
         }

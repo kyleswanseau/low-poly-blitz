@@ -32,6 +32,9 @@ public class RangeRing : MonoBehaviour
 
     public void SetVisible(bool set)
     {
-        _lineRenderer.enabled = set;
+        if (null != _lineRenderer)
+        {
+            _lineRenderer.enabled = set;
+        }
     }
 }
