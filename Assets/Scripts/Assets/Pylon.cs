@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Pylon : Building
@@ -51,7 +53,7 @@ public class Pylon : Building
     public void BuildFactory(Vector3 position)
     {
         Team team = GetComponent<PlayerComponent>().player.team;
-        if (team.poly >= Factory.BUILD_COST)
+        if (team.poly >= Factory.BUILD_COST && !HasNearbyBuildings(position, Factory.RANGE))
         {
             team.AddPoly(-Factory.BUILD_COST);
             position += new Vector3(0f, 0.05f, 0f);
@@ -73,12 +75,27 @@ public class Pylon : Building
     public void BuildMine(Vector3 position)
     {
         Team team = GetComponent<PlayerComponent>().player.team;
-        if (team.poly >= Mine.BUILD_COST)
+        if (team.poly >= Mine.BUILD_COST && !HasNearbyBuildings(position, Mine.RANGE))
         {
             team.AddPoly(-Mine.BUILD_COST);
             position += new Vector3(0f, 1f, 0f);
             BuildGeneric(_minePool, position);
             team.AddIncome(Mine.INCOME);
         }
+    }
+
+    protected bool HasNearbyBuildings(Vector3 pos, float range)
+    {
+        List<Building> buildings = new List<Building>();
+        Collider[] hitColliders = Physics.OverlapSphere(pos, range);
+        foreach (Collider hitCollider in hitColliders)
+        {
+            GameObject assetObj = hitCollider.gameObject;
+            if (assetObj.GetComponent<Building>() && !assetObj.GetComponent<Pylon>())
+            {
+                buildings.Add(assetObj.GetComponent<Building>());
+            }
+        }
+        return buildings.Any();
     }
 }
