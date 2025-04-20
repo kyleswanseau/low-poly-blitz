@@ -3,7 +3,7 @@ using UnityEngine.Pool;
 
 public class AssetPool : MonoBehaviour
 {
-    public Asset _prefab;
+    [SerializeField] private Asset _prefab;
 
     protected ObjectPool<Asset> _pool;
     protected bool _collectionCheck = true;

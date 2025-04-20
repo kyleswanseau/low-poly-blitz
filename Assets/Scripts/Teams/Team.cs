@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +9,8 @@ public class Team
     public static readonly Team neutralTeam = new Team(Resources.Load<Material>("Materials/Gray"));
     public Material material { get; private set; }
     public int index { get; private set; }
-    public float poly { get; set; } = 0f;
+    public float poly { get; private set; } = 0f;
+    public float income { get; private set; } = 0f;
 
     private Team()
     {
@@ -21,6 +21,11 @@ public class Team
     public Team(Material material) : this()
     {
         this.material = material;
+    }
+
+    public void Update()
+    {
+        poly += income;
     }
 
     public void AddPlayer(Player player)
@@ -50,5 +55,15 @@ public class Team
     public Dictionary<int, Player> GetPlayers()
     {
         return _players;
+    }
+
+    public void AddIncome(float income)
+    {
+        this.income += income;
+    }
+
+    public void AddPoly(float poly)
+    {
+        this.poly += poly;
     }
 }

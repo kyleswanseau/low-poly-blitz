@@ -1,15 +1,14 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cube : Unit
 {
-    public override float MAX_HEALTH { get; } = 10f;
+    [SerializeField] public static float MAX_HEALTH = 10f;
+    [SerializeField] public static float RANGE = 1f;
+    [SerializeField] public static float BUILD_COST = 5f;
+    [SerializeField] public static float BUILD_TIME = 5f;
     public override float SPEED { get; } = 5f;
     public override float DAMAGE { get; } = 5f;
     public override float COOLDOWN { get; } = 5f;
-    public override float RANGE { get; } = 1f;
-    public override float BUILD_COST { get; } = 5f;
-    public override float BUILD_TIME { get; } = 5f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 10f;
@@ -28,13 +27,13 @@ public class Cube : Unit
         base.FixedUpdate();
     }
 
-    protected void OnEnable()
+    public override void Reset()
     {
-        
+        health = MAX_HEALTH;
     }
 
-    protected void OnDisable()
+    public override float GetRange()
     {
-        
+        return RANGE;
     }
 }

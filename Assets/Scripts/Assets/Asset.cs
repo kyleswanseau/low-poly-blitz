@@ -3,13 +3,8 @@ using UnityEngine;
 public abstract class Asset : MonoBehaviour
 {
     protected Camera _mainCam;
-    protected SelectRing _halo;
-    protected RangeRing _range;
-
-    public abstract float MAX_HEALTH { get; }
-    public abstract float RANGE { get; }
-    public abstract float BUILD_COST { get; }
-    public abstract float BUILD_TIME { get; }
+    [SerializeField] protected SelectRing _halo;
+    [SerializeField] protected RangeRing _range;
 
     protected abstract AssetPool pool { get; set; }
     protected abstract float health { get; set; }
@@ -43,10 +38,7 @@ public abstract class Asset : MonoBehaviour
         pool.Release(this);
     }
 
-    public virtual void Reset()
-    {
-        health = MAX_HEALTH;
-    }
+    public abstract void Reset();
 
     public void SetHalo(EIntensity intensity)
     {
@@ -57,4 +49,6 @@ public abstract class Asset : MonoBehaviour
     {
         _range.SetVisible(set);
     }
+
+    public abstract float GetRange();
 }

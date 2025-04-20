@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class MasterController : MonoBehaviour
 {
@@ -8,11 +9,13 @@ public class MasterController : MonoBehaviour
     [SerializeField] private Asset factory;
     [SerializeField] private Asset mine;
     [SerializeField] private Asset pylon;
+    private TeamController teamController;
 
     private void Start()
     {
-        Player player1 = GetComponent<TeamController>().GetPlayer(1);
-        Player player2 = GetComponent<TeamController>().GetPlayer(2);
+        teamController = GetComponent<TeamController>();
+        Player player1 = teamController.GetPlayer(1);
+        Player player2 = teamController.GetPlayer(2);
         Camera mainCam = Camera.main;
         mainCam.GetComponent<PlayerComponent>().player = player1;
 
@@ -34,10 +37,21 @@ public class MasterController : MonoBehaviour
         Asset newPylon = Instantiate(pylon);
         newPylon.GetComponent<PlayerComponent>().player = player1;
         player1.AddPlayerAsset(newPylon);
+
+        foreach (var team in teamController.GetTeams())
+        {
+            team.Value.AddIncome(5f);
+        }
     }
 
     private void FixedUpdate()
     {
-        
+        if (Time.fixedTime + Time.fixedDeltaTime > Mathf.Ceil(Time.fixedTime))
+        {
+            foreach (var team in teamController.GetTeams())
+            {
+                team.Value.AddPoly(team.Value.income);
+            }
+        }
     }
 }

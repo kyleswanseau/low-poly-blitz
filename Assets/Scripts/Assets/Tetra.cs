@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class Tetra : Unit
 {
-    public override float MAX_HEALTH { get; } = 10f;
+    [SerializeField] public static float MAX_HEALTH = 10f;
+    [SerializeField] public static float RANGE = 10f;
+    [SerializeField] public static float BUILD_COST = 10f;
+    [SerializeField] public static float BUILD_TIME = 10f;
+
     public override float SPEED { get; } = 3f;
     public override float DAMAGE { get; } = 10f;
     public override float COOLDOWN { get; } = 5f;
-    public override float RANGE { get; } = 10f;
-    public override float BUILD_COST { get; } = 20f;
-    public override float BUILD_TIME { get; } = 10f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 5f;
@@ -25,5 +26,15 @@ public class Tetra : Unit
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+    }
+
+    public override void Reset()
+    {
+        health = MAX_HEALTH;
+    }
+
+    public override float GetRange()
+    {
+        return RANGE;
     }
 }

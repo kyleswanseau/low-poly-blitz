@@ -152,13 +152,13 @@ public abstract class Unit : Asset
     {
         return (Vector3.Distance(
             gameObject.transform.position,
-            attackTarget.gameObject.transform.position) <= RANGE);
+            attackTarget.gameObject.transform.position) <= GetRange());
     }
 
     protected List<Asset> NearbyEnemies()
     {
         List<Asset> enemies = new List<Asset>();
-        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, RANGE);
+        Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, GetRange());
         foreach (Collider hitCollider in hitColliders)
         {
             GameObject assetObj = hitCollider.gameObject;

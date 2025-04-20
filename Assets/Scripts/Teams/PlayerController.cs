@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
             _commandbar.gameObject.SetActive(false);
             _infobar.gameObject.SetActive(false);
         }
-        _resourcebar.setPolyCount(player.team.poly);
+        _resourcebar.setPolyCount(player.team.poly, player.team.income);
     }
 
     private void SelectAssets()
@@ -239,15 +239,13 @@ public class PlayerController : MonoBehaviour
             {
                 RaycastHit hit;
                 Physics.Raycast(ray, out hit);
-                foreach (Asset asset in selected)
+                foreach (Pylon pylon in selected)
                 {
-                    if (asset is Pylon pylon &&
-                        Vector3.Distance(pylon.transform.position, hit.point) <= pylon.RANGE)
+                    if (Vector3.Distance(pylon.transform.position, hit.point) <= Pylon.RANGE)
                     {
                         switch (_buildBuilding)
                         {
                             case EBuild.Factory:
-
                                 pylon.BuildFactory(hit.point);
                                 _buildBuilding = EBuild.None;
                                 break;

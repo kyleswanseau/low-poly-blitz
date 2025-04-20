@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Mine : Building
 {
-    [SerializeField] protected static readonly float INCOME = 5f;
+    [SerializeField] public static readonly float INCOME = 5f;
 
-    public override float MAX_HEALTH { get; } = 20f;
-    public override float RANGE { get; } = 10f;
-    public override float BUILD_COST { get; } = 20f;
-    public override float BUILD_TIME { get; } = 10f;
+    [SerializeField] public static float MAX_HEALTH = 20f;
+    [SerializeField] public static float RANGE = 10f;
+    [SerializeField] public static float BUILD_COST = 20f;
+    [SerializeField] public static float BUILD_TIME = 10f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 20f;
@@ -21,10 +21,20 @@ public class Mine : Building
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (Time.fixedTime + Time.fixedDeltaTime > Mathf.Ceil(Time.fixedTime))
-        {
-            // Add income every second
-            GetComponent<PlayerComponent>().player.team.poly += INCOME;
-        }
+    }
+
+    protected override void Die()
+    {
+        GetComponent<PlayerComponent>().player.team.AddIncome(-INCOME);
+        base.Die();
+    }
+    public override void Reset()
+    {
+        health = MAX_HEALTH;
+    }
+
+    public override float GetRange()
+    {
+        return RANGE;
     }
 }

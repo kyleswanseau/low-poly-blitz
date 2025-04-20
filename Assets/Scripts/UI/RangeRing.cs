@@ -11,7 +11,7 @@ public class RangeRing : MonoBehaviour
     {
         _lineRenderer = GetComponent<LineRenderer>();
         _lineRenderer.loop = true;
-        _radius = transform.parent.GetComponent<Asset>().RANGE;
+        _radius = transform.parent.GetComponent<Asset>().GetRange();
         Draw();
         SetVisible(false);
     }

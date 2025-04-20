@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class Factory : Building
 {
@@ -14,11 +15,13 @@ public class Factory : Building
     protected AssetPool _spherePool;
     protected AssetPool _tetraPool;
     protected EUnits _unit = EUnits.None;
+    protected bool _isBuilding = false;
+    protected Team _team;
 
-    public override float MAX_HEALTH { get; } = 50f;
-    public override float RANGE { get; } = 5f;
-    public override float BUILD_COST { get; } = 50f;
-    public override float BUILD_TIME { get; } = 20f;
+    [SerializeField] public static float MAX_HEALTH = 50f;
+    [SerializeField] public static float RANGE = 5f;
+    [SerializeField] public static float BUILD_COST = 50f;
+    [SerializeField] public static float BUILD_TIME = 20f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 50f;
@@ -56,7 +59,53 @@ public class Factory : Building
                     break;
             }
         }
-        progress += Time.fixedDeltaTime;
+        if (_isBuilding)
+        {
+            if (_team.poly <= 0f && _team.income <= 0f)
+            {
+                _isBuilding = false;
+                SetBuildingCost(_isBuilding);
+            }
+            else
+            {
+                progress += Time.fixedDeltaTime;
+            }
+        }
+        else if (_unit != EUnits.None && !_isBuilding)
+        {
+            float bc;
+            switch (_unit)
+            {
+                case EUnits.Cube:
+                    bc = Cube.BUILD_COST;
+                    break;
+                case EUnits.Sphere:
+                    bc = Sphere.BUILD_COST;
+                    break;
+                case EUnits.Tetra:
+                    bc = Tetra.BUILD_COST;
+                    break;
+                default:
+                    bc = 0f;
+                    break;
+            }
+            if (_team.poly >= bc)
+            {
+                _isBuilding = true;
+                SetBuildingCost(_isBuilding);
+                progress += Time.fixedDeltaTime;
+            }
+        }
+    }
+
+    public override void Reset()
+    {
+        health = MAX_HEALTH;
+    }
+
+    public override float GetRange()
+    {
+        return RANGE;
     }
 
     public void MoveCmd(Vector3 position)
@@ -66,15 +115,55 @@ public class Factory : Building
 
     public void StopCmd()
     {
+        _isBuilding = false;
+        SetBuildingCost(_isBuilding);
         _unit = EUnits.None;
         progress = 1f;
         maxProgress = 1f;
         rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 3f);
     }
 
+    protected void SetBuildingCost(bool isBuilding)
+    {
+        if (isBuilding)
+        {
+            switch (_unit)
+            {
+                case EUnits.Cube:
+                    _team.AddIncome(-Cube.BUILD_COST);
+                    break;
+                case EUnits.Sphere:
+                    _team.AddIncome(-Sphere.BUILD_COST);
+                    break;
+                case EUnits.Tetra:
+                    _team.AddIncome(-Tetra.BUILD_COST);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            switch (_unit)
+            {
+                case EUnits.Cube:
+                    _team.AddIncome(Cube.BUILD_COST);
+                    break;
+                case EUnits.Sphere:
+                    _team.AddIncome(Sphere.BUILD_COST);
+                    break;
+                case EUnits.Tetra:
+                    _team.AddIncome(Tetra.BUILD_COST);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     protected Asset BuildGeneric(AssetPool assetPool)
     {
-        Player owner = gameObject.GetComponent<PlayerComponent>().player;
+        Player owner = GetComponent<PlayerComponent>().player;
         Asset newAsset = assetPool.Get();
         newAsset.transform.position = gameObject.transform.position;
         newAsset.transform.rotation = gameObject.transform.rotation;
@@ -93,22 +182,31 @@ public class Factory : Building
 
     public void BuildCubes()
     {
+        _team = GetComponent<PlayerComponent>().player.team;
         _unit = EUnits.Cube;
+        _isBuilding = true;
+        SetBuildingCost(_isBuilding);
         progress = 0f;
-        maxProgress = _cubePool._prefab.BUILD_TIME;
+        maxProgress = Cube.BUILD_TIME;
     }
 
     public void BuildSpheres()
     {
+        _team = GetComponent<PlayerComponent>().player.team;
         _unit = EUnits.Sphere;
+        _isBuilding = true;
+        SetBuildingCost(_isBuilding);
         progress = 0f;
-        maxProgress = _spherePool._prefab.BUILD_TIME;
+        maxProgress = Sphere.BUILD_TIME;
     }
 
     public void BuildTetras()
     {
+        _team = GetComponent<PlayerComponent>().player.team;
         _unit = EUnits.Tetra;
+        _isBuilding = true;
+        SetBuildingCost(_isBuilding);
         progress = 0f;
-        maxProgress = _tetraPool._prefab.BUILD_TIME;
+        maxProgress = Tetra.BUILD_TIME;
     }
 }
