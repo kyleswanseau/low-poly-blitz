@@ -110,7 +110,8 @@ public class PlayerController : MonoBehaviour
                 // Click selection
                 if (Physics.Raycast(ray, out hit) &&
                     hit.collider.gameObject.GetComponent<Asset>() &&
-                    hit.collider.gameObject.GetComponent<Asset>() == hoveredSingle)
+                    hit.collider.gameObject.GetComponent<Asset>() == hoveredSingle &&
+                    hit.collider.gameObject.GetComponent<PlayerComponent>().player == player)
                 {
                     selected.Clear();
                     selected.Add(hoveredSingle);
@@ -241,7 +242,8 @@ public class PlayerController : MonoBehaviour
                 Physics.Raycast(ray, out hit);
                 foreach (Pylon pylon in selected)
                 {
-                    if (Vector3.Distance(pylon.transform.position, hit.point) <= Pylon.RANGE)
+                    if (hit.collider.gameObject.layer == 6 &&
+                        Vector3.Distance(pylon.transform.position, hit.point) <= Pylon.RANGE)
                     {
                         switch (_buildBuilding)
                         {

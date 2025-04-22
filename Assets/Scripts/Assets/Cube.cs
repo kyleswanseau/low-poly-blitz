@@ -8,7 +8,7 @@ public class Cube : Unit
     [SerializeField] public static float BUILD_TIME = 5f;
     public override float SPEED { get; } = 5f;
     public override float DAMAGE { get; } = 5f;
-    public override float COOLDOWN { get; } = 5f;
+    public override float COOLDOWN { get; } = 2f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 10f;

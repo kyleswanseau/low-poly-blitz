@@ -18,7 +18,7 @@ public class Factory : Building
     protected bool _isBuilding = false;
     protected Team _team;
 
-    [SerializeField] public static float MAX_HEALTH = 50f;
+    [SerializeField] public static float MAX_HEALTH = 25f;
     [SerializeField] public static float RANGE = 5f;
     [SerializeField] public static float BUILD_COST = 50f;
     [SerializeField] public static float BUILD_TIME = 20f;
@@ -61,7 +61,7 @@ public class Factory : Building
         }
         if (_isBuilding)
         {
-            if (_team.poly <= 0f && _team.income <= 0f)
+            if (_team.poly <= 0f && _team.income < 0f)
             {
                 _isBuilding = false;
                 SetBuildingCost(_isBuilding);
@@ -100,6 +100,7 @@ public class Factory : Building
 
     public override void Reset()
     {
+        StopCmd();
         health = MAX_HEALTH;
     }
 
@@ -120,7 +121,7 @@ public class Factory : Building
         _unit = EUnits.None;
         progress = 1f;
         maxProgress = 1f;
-        rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 3f);
+        rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 5f);
     }
 
     protected void SetBuildingCost(bool isBuilding)

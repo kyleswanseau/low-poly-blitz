@@ -150,9 +150,13 @@ public abstract class Unit : Asset
 
     protected bool CanAttackTarget()
     {
-        return (Vector3.Distance(
-            gameObject.transform.position,
-            attackTarget.gameObject.transform.position) <= GetRange());
+        Vector3 myPos = transform.position;
+        myPos.y = 0;
+        Vector3 targetPos = attackTarget.gameObject.transform.position;
+        targetPos.y = 0;
+        return (Vector3.Distance(myPos, targetPos) <= GetRange() &&
+            GetComponent<PlayerComponent>().player.team !=
+            attackTarget.GetComponent<PlayerComponent>().player.team);
     }
 
     protected List<Asset> NearbyEnemies()

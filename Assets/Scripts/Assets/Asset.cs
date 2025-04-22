@@ -34,7 +34,9 @@ public abstract class Asset : MonoBehaviour
 
     protected virtual void Die()
     {
-        GetComponent<PlayerComponent>().player.controller.RemoveAsset(this);
+        Player player = GetComponent<PlayerComponent>().player;
+        player.RemovePlayerAsset(this);
+        player.controller?.RemoveAsset(this);
         pool.Release(this);
     }
 

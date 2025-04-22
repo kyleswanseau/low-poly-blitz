@@ -8,7 +8,7 @@ public class Pylon : Building
     protected AssetPool _pylonPool;
     protected AssetPool _minePool;
 
-    [SerializeField] public static float MAX_HEALTH = 20f;
+    [SerializeField] public static float MAX_HEALTH = 15f;
     [SerializeField] public static float RANGE = 20f;
     [SerializeField] public static float BUILD_COST = 10f;
     [SerializeField] public static float BUILD_TIME = 5f;

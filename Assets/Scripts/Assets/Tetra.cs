@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tetra : Unit
 {
-    [SerializeField] public static float MAX_HEALTH = 10f;
+    [SerializeField] public static float MAX_HEALTH = 5f;
     [SerializeField] public static float RANGE = 10f;
     [SerializeField] public static float BUILD_COST = 10f;
     [SerializeField] public static float BUILD_TIME = 10f;

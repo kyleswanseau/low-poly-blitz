@@ -32,12 +32,12 @@ public class CommandbarBehaviour : MonoBehaviour
         switch (mode)
         {
             case 1:
-                _moveButton.gameObject.SetActive(true);
-                _attackMoveButton.gameObject.SetActive(true);
-                _stopButton.gameObject.SetActive(true);
-                _attackButton.gameObject.SetActive(true);
-                _rallyButton.gameObject.SetActive(false);
-                _facstopButton.gameObject.SetActive(false);
+                _moveButton.gameObject.SetActive(false);
+                _attackMoveButton.gameObject.SetActive(false);
+                _stopButton.gameObject.SetActive(false);
+                _attackButton.gameObject.SetActive(false);
+                _rallyButton.gameObject.SetActive(true);
+                _facstopButton.gameObject.SetActive(true);
                 break;
             case 2:
             case 3:
@@ -49,12 +49,12 @@ public class CommandbarBehaviour : MonoBehaviour
                 _facstopButton.gameObject.SetActive(false);
                 break;
             default:
-                _moveButton.gameObject.SetActive(false);
-                _attackMoveButton.gameObject.SetActive(false);
-                _stopButton.gameObject.SetActive(false);
-                _attackButton.gameObject.SetActive(false);
-                _rallyButton.gameObject.SetActive(true);
-                _facstopButton.gameObject.SetActive(true);
+                _moveButton.gameObject.SetActive(true);
+                _attackMoveButton.gameObject.SetActive(true);
+                _stopButton.gameObject.SetActive(true);
+                _attackButton.gameObject.SetActive(true);
+                _rallyButton.gameObject.SetActive(false);
+                _facstopButton.gameObject.SetActive(false);
                 break;
         }
     }

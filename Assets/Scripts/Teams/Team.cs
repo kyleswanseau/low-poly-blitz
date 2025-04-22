@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Team
 {
-    private static Dictionary<int, Player> _players = new Dictionary<int, Player>();
+    private Dictionary<int, Player> _players = new Dictionary<int, Player>();
     private static int _nextIndex = 0;
 
     public static readonly Team neutralTeam = new Team(Resources.Load<Material>("Materials/Gray"));

@@ -7,9 +7,9 @@ public class Sphere : Unit
     [SerializeField] public static float BUILD_COST = 5f;
     [SerializeField] public static float BUILD_TIME = 10f;
 
-    public override float SPEED { get; } = 10f;
+    public override float SPEED { get; } = 15f;
     public override float DAMAGE { get; } = 5f;
-    public override float COOLDOWN { get; } = 10f;
+    public override float COOLDOWN { get; } = 3f;
 
     protected override AssetPool pool { get; set; }
     protected override float health { get; set; } = 5f;

@@ -4,7 +4,7 @@ public class Mine : Building
 {
     [SerializeField] public static readonly float INCOME = 5f;
 
-    [SerializeField] public static float MAX_HEALTH = 20f;
+    [SerializeField] public static float MAX_HEALTH = 10f;
     [SerializeField] public static float RANGE = 10f;
     [SerializeField] public static float BUILD_COST = 20f;
     [SerializeField] public static float BUILD_TIME = 10f;
