@@ -129,6 +129,9 @@ PrefabInstance:
       addedObject: {fileID: 536376704903348481}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c636e054d692bf489fe6b286e478ec3, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 3124805400224961037}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c636e054d692bf489fe6b286e478ec3, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 4789775686624919850}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c636e054d692bf489fe6b286e478ec3, type: 3}
       insertIndex: -1
@@ -159,9 +162,25 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 4
+  m_Height: 5
   m_Direction: 1
   m_Center: {x: 0, y: -1.75, z: 0}
+--- !u!208 &3124805400224961037
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2808880184389032217}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 2.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -1.7500001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!114 &4789775686624919850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4aab2bcf329be245931fc883f8da533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _halo: {fileID: 0}
+  _range: {fileID: 0}
 --- !u!114 &1752097284824116784
 MonoBehaviour:
   m_ObjectHideFlags: 0

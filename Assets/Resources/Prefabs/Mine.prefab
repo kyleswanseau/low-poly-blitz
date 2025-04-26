@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8785106030377894361}
   - component: {fileID: 6777354671586669843}
   - component: {fileID: 587134032804358530}
+  - component: {fileID: 550414541166357198}
   - component: {fileID: 8185125765360594579}
   - component: {fileID: 621897857784749629}
   m_Layer: 0
@@ -114,6 +115,22 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: -0.5, z: 0}
+--- !u!208 &550414541166357198
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976192102882759878}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1, y: 1.5, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.5, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!114 &8185125765360594579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,6 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf313850eae3c0f4aba62f9b2e05fc9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _halo: {fileID: 0}
+  _range: {fileID: 0}
 --- !u!114 &621897857784749629
 MonoBehaviour:
   m_ObjectHideFlags: 0
