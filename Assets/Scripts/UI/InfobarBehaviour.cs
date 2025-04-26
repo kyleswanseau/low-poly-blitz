@@ -14,6 +14,7 @@ public class InfobarBehaviour : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _progressText;
     [SerializeField] private Slider _progressSlider;
     private Factory? _factory = null;
+    private Pylon? _pylon = null;
 
     public Rect rect { get; private set; }
 
@@ -82,6 +83,11 @@ public class InfobarBehaviour : MonoBehaviour
         _progressSlider.maxValue = _factory.maxProgress;
     }
 
+    public void setPylon(Pylon pylon)
+    {
+        _pylon = pylon;
+    }
+
     public void BuildCubes()
     {
         _factory.BuildCubes();
@@ -95,5 +101,20 @@ public class InfobarBehaviour : MonoBehaviour
     public void BuildTetras()
     {
         _factory.BuildTetras();
+    }
+
+    public void BuildFactory()
+    {
+        
+    }
+
+    public void BuildPylon()
+    {
+
+    }
+
+    public void BuildMine()
+    {
+
     }
 }

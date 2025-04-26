@@ -3,7 +3,7 @@ using UnityEngine;
 public class Sphere : Unit
 {
     [SerializeField] public static float MAX_HEALTH = 5f;
-    [SerializeField] public static float RANGE = 1f;
+    [SerializeField] public static float RANGE = 2f;
     [SerializeField] public static float BUILD_COST = 5f;
     [SerializeField] public static float BUILD_TIME = 10f;
 

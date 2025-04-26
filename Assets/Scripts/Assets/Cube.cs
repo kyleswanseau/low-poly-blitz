@@ -3,7 +3,7 @@ using UnityEngine;
 public class Cube : Unit
 {
     [SerializeField] public static float MAX_HEALTH = 10f;
-    [SerializeField] public static float RANGE = 1f;
+    [SerializeField] public static float RANGE = 2f;
     [SerializeField] public static float BUILD_COST = 5f;
     [SerializeField] public static float BUILD_TIME = 5f;
     public override float SPEED { get; } = 5f;

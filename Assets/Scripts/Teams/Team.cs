@@ -11,6 +11,7 @@ public class Team
     public int index { get; private set; }
     public float poly { get; private set; } = 0f;
     public float income { get; private set; } = 0f;
+    public float expense { get; private set; } = 0f;
 
     private Team()
     {
@@ -57,13 +58,18 @@ public class Team
         return _players;
     }
 
+    public void AddPoly(float poly)
+    {
+        this.poly += poly;
+    }
+
     public void AddIncome(float income)
     {
         this.income += income;
     }
 
-    public void AddPoly(float poly)
+    public void AddExpense(float expense)
     {
-        this.poly += poly;
+        this.expense += expense;
     }
 }

@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
             _commandbar.gameObject.SetActive(false);
             _infobar.gameObject.SetActive(false);
         }
-        _resourcebar.setPolyCount(player.team.poly, player.team.income);
+        _resourcebar.setPolyCount(player.team.poly, player.team.income, player.team.expense);
     }
 
     private void SelectAssets()

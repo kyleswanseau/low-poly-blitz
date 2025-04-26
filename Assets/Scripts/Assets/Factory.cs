@@ -131,13 +131,13 @@ public class Factory : Building
             switch (_unit)
             {
                 case EUnits.Cube:
-                    _team.AddIncome(-Cube.BUILD_COST);
+                    _team.AddExpense(Cube.BUILD_COST);
                     break;
                 case EUnits.Sphere:
-                    _team.AddIncome(-Sphere.BUILD_COST);
+                    _team.AddExpense(Sphere.BUILD_COST);
                     break;
                 case EUnits.Tetra:
-                    _team.AddIncome(-Tetra.BUILD_COST);
+                    _team.AddExpense(Tetra.BUILD_COST);
                     break;
                 default:
                     break;
@@ -148,13 +148,13 @@ public class Factory : Building
             switch (_unit)
             {
                 case EUnits.Cube:
-                    _team.AddIncome(Cube.BUILD_COST);
+                    _team.AddExpense(-Cube.BUILD_COST);
                     break;
                 case EUnits.Sphere:
-                    _team.AddIncome(Sphere.BUILD_COST);
+                    _team.AddExpense(-Sphere.BUILD_COST);
                     break;
                 case EUnits.Tetra:
-                    _team.AddIncome(Tetra.BUILD_COST);
+                    _team.AddExpense(-Tetra.BUILD_COST);
                     break;
                 default:
                     break;
@@ -172,7 +172,7 @@ public class Factory : Building
         owner.AddPlayerAsset(newAsset);
         if (null == rallyPos)
         {
-            rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 3f);
+            rallyPos = Vector3.MoveTowards(transform.position, Vector3.zero, 5f);
         }
         if (newAsset is Unit newUnit)
         {
@@ -183,6 +183,8 @@ public class Factory : Building
 
     public void BuildCubes()
     {
+        _isBuilding = false;
+        SetBuildingCost(_isBuilding);
         _team = GetComponent<PlayerComponent>().player.team;
         _unit = EUnits.Cube;
         _isBuilding = true;
@@ -193,6 +195,8 @@ public class Factory : Building
 
     public void BuildSpheres()
     {
+        _isBuilding = false;
+        SetBuildingCost(_isBuilding);
         _team = GetComponent<PlayerComponent>().player.team;
         _unit = EUnits.Sphere;
         _isBuilding = true;
@@ -203,6 +207,8 @@ public class Factory : Building
 
     public void BuildTetras()
     {
+        _isBuilding = false;
+        SetBuildingCost(_isBuilding);
         _team = GetComponent<PlayerComponent>().player.team;
         _unit = EUnits.Tetra;
         _isBuilding = true;

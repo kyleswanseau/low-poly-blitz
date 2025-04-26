@@ -15,11 +15,11 @@ public class ResourcebarBehaviour : MonoBehaviour
         rect = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
     }
 
-    public void setPolyCount(float poly, float income)
+    public void setPolyCount(float poly, float income, float expense)
     {
         if (income >= 0)
         {
-            _polyCount.SetText(poly.ToString() + " + " + income.ToString());
+            _polyCount.SetText(poly.ToString() + " + " + (income - expense).ToString());
         }
         else
         {

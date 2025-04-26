@@ -55,7 +55,7 @@ public class MasterController : MonoBehaviour
                     {
                         Debug.Log("Team " + kvp.Value.index + " has lost!");
                     }
-                    kvp.Value.AddPoly(kvp.Value.income);
+                    kvp.Value.AddPoly(kvp.Value.income - kvp.Value.expense);
                 }
             }
         }
