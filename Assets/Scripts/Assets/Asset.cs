@@ -20,7 +20,7 @@ public abstract class Asset : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        
+    
     }
 
     public virtual void Damage(float damage)
@@ -32,12 +32,15 @@ public abstract class Asset : MonoBehaviour
         }
     }
 
-    protected virtual void Die()
+    public virtual void Die()
     {
         Player player = GetComponent<PlayerComponent>().player;
         player.RemovePlayerAsset(this);
         player.controller?.RemoveAsset(this);
-        pool.Release(this);
+        if (null != pool)
+        {
+            pool.Release(this);
+        }
     }
 
     public abstract void Reset();

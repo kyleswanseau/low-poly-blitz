@@ -10,7 +10,7 @@ public class Pylon : Building
 
     [SerializeField] public static float MAX_HEALTH = 15f;
     [SerializeField] public static float RANGE = 20f;
-    [SerializeField] public static float BUILD_COST = 10f;
+    [SerializeField] public static float BUILD_COST = 20f;
     [SerializeField] public static float BUILD_TIME = 5f;
 
     protected override AssetPool pool { get; set; }
@@ -46,42 +46,46 @@ public class Pylon : Building
         Asset newAsset = assetPool.Get();
         newAsset.transform.position = position;
         newAsset.GetComponent<PlayerComponent>().player = owner;
+        newAsset.Reset();
         owner.AddPlayerAsset(newAsset);
         return newAsset;
     }
 
-    public void BuildFactory(Vector3 position)
+    public Factory? BuildFactory(Vector3 position)
     {
         Team team = GetComponent<PlayerComponent>().player.team;
         if (team.poly >= Factory.BUILD_COST && !HasNearbyBuildings(position, Factory.RANGE))
         {
             team.AddPoly(-Factory.BUILD_COST);
             position += new Vector3(0f, 0.05f, 0f);
-            BuildGeneric(_factoryPool, position);
+            return (Factory) BuildGeneric(_factoryPool, position);
         }
+        return null;
     }
 
-    public void BuildPylon(Vector3 position)
+    public Pylon? BuildPylon(Vector3 position)
     {
         Team team = GetComponent<PlayerComponent>().player.team;
         if (team.poly >= Pylon.BUILD_COST)
         {
             team.AddPoly(-Pylon.BUILD_COST);
             position += new Vector3(0f, 3.75f, 0f);
-            BuildGeneric(_pylonPool, position);
+            return (Pylon) BuildGeneric(_pylonPool, position);
         }
+        return null;
     }
 
-    public void BuildMine(Vector3 position)
+    public Mine? BuildMine(Vector3 position)
     {
         Team team = GetComponent<PlayerComponent>().player.team;
         if (team.poly >= Mine.BUILD_COST && !HasNearbyBuildings(position, Mine.RANGE))
         {
             team.AddPoly(-Mine.BUILD_COST);
             position += new Vector3(0f, 1f, 0f);
-            BuildGeneric(_minePool, position);
             team.AddIncome(Mine.INCOME);
+            return (Mine) BuildGeneric(_minePool, position);
         }
+        return null;
     }
 
     protected bool HasNearbyBuildings(Vector3 pos, float range)

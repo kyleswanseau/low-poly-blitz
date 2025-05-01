@@ -22,6 +22,7 @@ public enum EBuild
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private int _playerIndex;
     private Vector2? _startPos;
     private Vector2? _endPos;
     private CommandbarBehaviour _commandbar;
@@ -40,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponent<PlayerComponent>().player;
+        TeamController tc = FindFirstObjectByType<TeamController>();
+        player = tc.GetPlayer(_playerIndex);
         player.setController(this);
         mainCam = Camera.main;
         mouse = Mouse.current;

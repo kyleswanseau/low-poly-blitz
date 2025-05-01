@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public abstract class Unit : Asset
 {
-    protected NavMeshAgent _agent;
-
     public abstract float SPEED { get; }
     public abstract float DAMAGE { get; }
     public abstract float COOLDOWN { get; }
@@ -19,8 +17,7 @@ public abstract class Unit : Asset
     protected override void Start()
     {
         base.Start();
-        _agent = GetComponent<NavMeshAgent>();
-        _agent.speed = SPEED;
+        GetComponent<NavMeshAgent>().speed = SPEED;
     }
 
     protected override void FixedUpdate()
@@ -84,20 +81,23 @@ public abstract class Unit : Asset
     {
         if (null != attackTarget)
         {
-            if (!attackTarget.gameObject.activeInHierarchy)
+            if (attackTarget.gameObject.activeInHierarchy)
+            {
+                if (chaseEnemies)
+                {
+                    moveTarget = attackTarget.transform.position;
+                }
+                if (CanAttackTarget() && cooldown >= COOLDOWN)
+                {
+                    attackTarget.Damage(DAMAGE);
+                    cooldown = 0f;
+                }
+            }
+            else
             {
                 attackTarget = null;
             }
-            if (CanAttackTarget() && cooldown >= COOLDOWN)
-            {
-                attackTarget.Damage(DAMAGE);
-                cooldown = 0f;
-            }
-            if (chaseEnemies)
-            {
-                moveTarget = attackTarget.transform.position;
-            }
-            if (!attackTarget.gameObject.activeInHierarchy)
+            if (attackTarget != null && !attackTarget.gameObject.activeInHierarchy)
             {
                 if (chaseEnemies)
                 {
@@ -115,7 +115,7 @@ public abstract class Unit : Asset
     {
         if (null != moveTarget)
         {
-            _agent.SetDestination(moveTarget.Value);
+            GetComponent<NavMeshAgent>().SetDestination(moveTarget.Value);
         }
     }
 
@@ -145,18 +145,25 @@ public abstract class Unit : Asset
         attackTarget = null;
         moveTarget = null;
         chaseEnemies = true;
-        _agent.ResetPath();
+        GetComponent<NavMeshAgent>().ResetPath();
     }
 
     protected bool CanAttackTarget()
     {
-        Vector3 myPos = transform.position;
-        myPos.y = 0;
-        Vector3 targetPos = attackTarget.gameObject.transform.position;
-        targetPos.y = 0;
-        return (Vector3.Distance(myPos, targetPos) <= GetRange() &&
-            GetComponent<PlayerComponent>().player.team !=
-            attackTarget.GetComponent<PlayerComponent>().player.team);
+        if (null != attackTarget)
+        {
+            Vector3 myPos = transform.position;
+            myPos.y = 0;
+            Vector3 targetPos = attackTarget.gameObject.transform.position;
+            targetPos.y = 0;
+            return (Vector3.Distance(myPos, targetPos) <= GetRange() &&
+                GetComponent<PlayerComponent>().player.team !=
+                attackTarget.GetComponent<PlayerComponent>().player.team);
+        }
+        else
+        {
+            return false;
+        }
     }
 
     protected List<Asset> NearbyEnemies()

@@ -30,6 +30,8 @@ public class Cube : Unit
     public override void Reset()
     {
         health = MAX_HEALTH;
+        cooldown = COOLDOWN;
+        StopCmd();
     }
 
     public override float GetRange()

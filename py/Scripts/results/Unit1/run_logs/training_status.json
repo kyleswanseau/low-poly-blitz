@@ -1,0 +1,47 @@
+{
+    "UnitBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 60420,
+                "file_path": "results\\Unit1\\UnitBehaviour\\UnitBehaviour-60420.onnx",
+                "reward": -6.611999034881592,
+                "creation_time": 1746073342.205615,
+                "auxillary_file_paths": [
+                    "results\\Unit1\\UnitBehaviour\\UnitBehaviour-60420.pt"
+                ]
+            },
+            {
+                "steps": 123540,
+                "file_path": "results\\Unit1\\UnitBehaviour\\UnitBehaviour-123540.onnx",
+                "reward": -5.847570519058072,
+                "creation_time": 1746076722.0838528,
+                "auxillary_file_paths": [
+                    "results\\Unit1\\UnitBehaviour\\UnitBehaviour-123540.pt"
+                ]
+            },
+            {
+                "steps": 171000,
+                "file_path": "results\\Unit1\\UnitBehaviour\\UnitBehaviour-171000.onnx",
+                "reward": -2.969999313354492,
+                "creation_time": 1746079531.2835329,
+                "auxillary_file_paths": [
+                    "results\\Unit1\\UnitBehaviour\\UnitBehaviour-171000.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 171000,
+            "file_path": "results\\Unit1\\UnitBehaviour.onnx",
+            "reward": -2.969999313354492,
+            "creation_time": 1746079531.2835329,
+            "auxillary_file_paths": [
+                "results\\Unit1\\UnitBehaviour\\UnitBehaviour-171000.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

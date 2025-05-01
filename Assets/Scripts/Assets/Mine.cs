@@ -6,7 +6,7 @@ public class Mine : Building
 
     [SerializeField] public static float MAX_HEALTH = 10f;
     [SerializeField] public static float RANGE = 10f;
-    [SerializeField] public static float BUILD_COST = 20f;
+    [SerializeField] public static float BUILD_COST = 40f;
     [SerializeField] public static float BUILD_TIME = 10f;
 
     protected override AssetPool pool { get; set; }
@@ -23,7 +23,7 @@ public class Mine : Building
         base.FixedUpdate();
     }
 
-    protected override void Die()
+    public override void Die()
     {
         GetComponent<PlayerComponent>().player.team.AddIncome(-INCOME);
         base.Die();

@@ -1,7 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using UnityEngine.UIElements;
 
 public class MasterController : MonoBehaviour
 {
@@ -11,31 +10,14 @@ public class MasterController : MonoBehaviour
     [SerializeField] private Asset factory;
     [SerializeField] private Asset mine;
     [SerializeField] private Asset pylon;
+    [SerializeField] private BuildingAI buildingAI;
+    [SerializeField] private UnitAI unitAI;
     private TeamController teamController;
 
     private void Start()
     {
-        teamController = GetComponent<TeamController>();
-        Player player1 = teamController.GetPlayer(1);
-        Player player2 = teamController.GetPlayer(2);
-        Camera mainCam = Camera.main;
-        mainCam.GetComponent<PlayerComponent>().player = player1;
-        AssetPool pylonPool = GameObject.FindWithTag("PylonPool").GetComponent<AssetPool>();
-
-        Asset player1Pylon = pylonPool.Get();
-        player1Pylon.transform.position = new Vector3(-80f, 3.75f, -80f);
-        player1Pylon.GetComponent<PlayerComponent>().player = player1;
-        player1.AddPlayerAsset(player1Pylon);
-
-        Asset player2Pylon = pylonPool.Get();
-        player2Pylon.transform.position = new Vector3(-60f, 3.75f, -60f);
-        player2Pylon.GetComponent<PlayerComponent>().player = player2;
-        player2.AddPlayerAsset(player2Pylon);
-
-        foreach (var team in teamController.GetTeams())
-        {
-            team.Value.AddIncome(5f);
-        }
+        //TrainBuildingAI();
+        TrainUnitAI();
     }
 
     private void FixedUpdate()
@@ -59,5 +41,120 @@ public class MasterController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void TrainBuildingAI()
+    {
+        teamController = GetComponent<TeamController>();
+        Player player1 = teamController.GetPlayer(1);
+        Player player2 = teamController.GetPlayer(2);
+        AssetPool pylonPool = GameObject.FindWithTag("PylonPool").GetComponent<AssetPool>();
+
+        Asset player1Pylon = pylonPool.Get();
+        player1Pylon.transform.position = new Vector3(-40f, 3.75f, -40f);
+        player1Pylon.GetComponent<PlayerComponent>().player = player1;
+        player1Pylon.Reset();
+        player1.AddPlayerAsset(player1Pylon);
+
+        Asset player2Pylon = pylonPool.Get();
+        player2Pylon.transform.position = new Vector3(40f, 3.75f, 40f);
+        player2Pylon.GetComponent<PlayerComponent>().player = player2;
+        player2Pylon.Reset();
+        player2.AddPlayerAsset(player2Pylon);
+
+        foreach (var team in teamController.GetTeams())
+        {
+            team.Value.AddIncome(5f);
+        }
+    }
+
+    public void RestartBuildingTraining()
+    {
+        foreach (var kvp in teamController.GetTeams())
+        {
+            foreach (var kvp2 in kvp.Value.GetPlayers())
+            {
+                List<Asset> assets = kvp2.Value.assets;
+                for (int i = assets.Count - 1; i >= 0; i--)
+                {
+                    Asset asset = assets[i];
+                    asset.Die();
+                }
+            }
+            kvp.Value.AddPoly(-kvp.Value.poly);
+            kvp.Value.AddIncome(-kvp.Value.income);
+            kvp.Value.AddExpense(-kvp.Value.expense);
+        }
+        TrainBuildingAI();
+    }
+
+    public void TrainUnitAI()
+    {
+        teamController = GetComponent<TeamController>();
+        Player player1 = teamController.GetPlayer(1);
+        Player player2 = teamController.GetPlayer(2);
+        AssetPool factoryPool = GameObject.FindWithTag("FactoryPool").GetComponent<AssetPool>();
+
+        Asset player1Factory1 = factoryPool.Get();
+        player1Factory1.transform.position = new Vector3(-40f, 0.05f, -40f);
+        player1Factory1.GetComponent<PlayerComponent>().player = player1;
+        player1Factory1.Reset();
+        player1.AddPlayerAsset(player1Factory1);
+        ((Factory)player1Factory1).BuildCubes();
+
+        Asset player1Factory2 = factoryPool.Get();
+        player1Factory2.transform.position = new Vector3(-35f, 0.05f, -40f);
+        player1Factory2.GetComponent<PlayerComponent>().player = player1;
+        player1Factory2.Reset();
+        player1.AddPlayerAsset(player1Factory2);
+        ((Factory)player1Factory2).BuildCubes();
+
+        Asset player2Factory1 = factoryPool.Get();
+        player2Factory1.transform.position = new Vector3(0f, 0.05f, 0f);
+        player2Factory1.GetComponent<PlayerComponent>().player = player2;
+        player2Factory1.Reset();
+        player2.AddPlayerAsset(player2Factory1);
+        ((Factory)player2Factory1).BuildCubes();
+
+        /*
+        Asset player2Factory2 = factoryPool.Get();
+        player2Factory2.transform.position = new Vector3(35f, 0.05f, 40f);
+        player2Factory2.GetComponent<PlayerComponent>().player = player2;
+        player2Factory2.Reset();
+        player2.AddPlayerAsset(player2Factory2);
+        ((Factory)player2Factory2).BuildCubes();
+
+        Asset player2Factory3 = factoryPool.Get();
+        player2Factory3.transform.position = new Vector3(-40f, 0.05f, 40f);
+        player2Factory3.GetComponent<PlayerComponent>().player = player2;
+        player2Factory3.Reset();
+        player2.AddPlayerAsset(player2Factory3);
+        ((Factory)player2Factory3).BuildCubes();
+        */
+
+        foreach (var team in teamController.GetTeams())
+        {
+            team.Value.AddIncome(20f);
+        }
+    }
+
+    public void RestartUnitTraining()
+    {
+        foreach (var kvp in teamController.GetTeams())
+        {
+            foreach (var kvp2 in kvp.Value.GetPlayers())
+            {
+                List<Asset> assets = kvp2.Value.assets;
+                for (int i = assets.Count - 1; i >= 0; i--)
+                {
+                    Asset asset = assets[i];
+                    asset.Die();
+                }
+            }
+            kvp.Value.AddPoly(-kvp.Value.poly);
+            kvp.Value.AddIncome(-kvp.Value.income);
+            kvp.Value.AddExpense(-kvp.Value.expense);
+        }
+        TrainUnitAI();
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerComponent : MonoBehaviour
 {
     private Player _player;
-    private static PlayerController _controller;
+    private PlayerController _controller;
 
     public Player player
     {

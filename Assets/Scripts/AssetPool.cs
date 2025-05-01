@@ -46,7 +46,9 @@ public class AssetPool : MonoBehaviour
 
     public Asset Get()
     {
-        return _pool.Get();
+        Asset asset = _pool.Get();
+        asset.Reset();
+        return asset;
     }
 
     public void Release(Asset obj)

@@ -1,0 +1,47 @@
+{
+    "BuildingBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 64056,
+                "file_path": "results\\test16\\BuildingBehaviour\\BuildingBehaviour-64056.onnx",
+                "reward": null,
+                "creation_time": 1745920715.3397996,
+                "auxillary_file_paths": [
+                    "results\\test16\\BuildingBehaviour\\BuildingBehaviour-64056.pt"
+                ]
+            },
+            {
+                "steps": 120586,
+                "file_path": "results\\test16\\BuildingBehaviour\\BuildingBehaviour-120586.onnx",
+                "reward": 33.357606713889076,
+                "creation_time": 1745923173.1834903,
+                "auxillary_file_paths": [
+                    "results\\test16\\BuildingBehaviour\\BuildingBehaviour-120586.pt"
+                ]
+            },
+            {
+                "steps": 272264,
+                "file_path": "results\\test16\\BuildingBehaviour\\BuildingBehaviour-272264.onnx",
+                "reward": 35.54200819007352,
+                "creation_time": 1745927485.5921123,
+                "auxillary_file_paths": [
+                    "results\\test16\\BuildingBehaviour\\BuildingBehaviour-272264.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 272264,
+            "file_path": "results\\test16\\BuildingBehaviour.onnx",
+            "reward": 35.54200819007352,
+            "creation_time": 1745927485.5921123,
+            "auxillary_file_paths": [
+                "results\\test16\\BuildingBehaviour\\BuildingBehaviour-272264.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
