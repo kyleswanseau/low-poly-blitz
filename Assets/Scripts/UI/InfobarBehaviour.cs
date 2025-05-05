@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class InfobarBehaviour : MonoBehaviour
 {
+    private PlayerController _controller;
     [SerializeField] private TextMeshProUGUI _unitName;
     [SerializeField] private Button _cubeButton;
     [SerializeField] private Button _sphereButton;
@@ -14,12 +15,12 @@ public class InfobarBehaviour : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _progressText;
     [SerializeField] private Slider _progressSlider;
     private Factory? _factory = null;
-    private Pylon? _pylon = null;
 
     public Rect rect { get; private set; }
 
     private void Start()
     {
+        _controller = Camera.main.GetComponent<PlayerController>();
         RectTransform rt = GetComponent<RectTransform>();
         Vector2 min = Vector2.Scale(rt.anchorMin, new Vector2(Screen.width, Screen.height));
         Vector2 max = Vector2.Scale(rt.anchorMax, new Vector2(Screen.width, Screen.height));
@@ -83,11 +84,6 @@ public class InfobarBehaviour : MonoBehaviour
         _progressSlider.maxValue = _factory.maxProgress;
     }
 
-    public void setPylon(Pylon pylon)
-    {
-        _pylon = pylon;
-    }
-
     public void BuildCubes()
     {
         _factory.BuildCubes();
@@ -105,16 +101,16 @@ public class InfobarBehaviour : MonoBehaviour
 
     public void BuildFactory()
     {
-        
+        _controller.buildBuilding = EBuild.Factory;
     }
 
     public void BuildPylon()
     {
-
+        _controller.buildBuilding = EBuild.Pylon;
     }
 
     public void BuildMine()
     {
-
+        _controller.buildBuilding = EBuild.Mine;
     }
 }

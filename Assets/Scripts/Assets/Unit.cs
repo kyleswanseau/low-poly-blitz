@@ -60,10 +60,6 @@ public abstract class Unit : Asset
         else
         {
             // Move
-            if (Vector3.Distance(transform.position, moveTarget.Value) <= 0.5f)
-            {
-                StopCmd();
-            }
             if (enemies.Any())
             {
                 attackTarget = closestEnemy;
@@ -114,9 +110,18 @@ public abstract class Unit : Asset
 
     protected virtual void Move()
     {
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        if (Vector3.Distance(new Vector3(transform.position.x, 0f, transform.position.z), agent.destination) <= agent.stoppingDistance)
+        {
+            moveTarget = null;
+        }
         if (null != moveTarget)
         {
-            GetComponent<NavMeshAgent>().SetDestination(moveTarget.Value);
+            agent.SetDestination(moveTarget.Value);
+        }
+        else
+        {
+            StopCmd();
         }
     }
 
@@ -125,6 +130,7 @@ public abstract class Unit : Asset
         attackTarget = asset;
         moveTarget = asset.transform.position;
         chaseEnemies = true;
+        GetComponent<NavMeshAgent>().SetDestination(moveTarget.Value);
     }
 
     public virtual void AttackMoveCmd(Vector3 position)
@@ -132,6 +138,7 @@ public abstract class Unit : Asset
         attackTarget = null;
         moveTarget = position;
         chaseEnemies = true;
+        GetComponent<NavMeshAgent>().SetDestination(moveTarget.Value);
     }
 
     public virtual void MoveCmd(Vector3 position)
@@ -139,6 +146,7 @@ public abstract class Unit : Asset
         attackTarget = null;
         moveTarget = position;
         chaseEnemies = false;
+        GetComponent<NavMeshAgent>().SetDestination(moveTarget.Value);
     }
 
     public virtual void StopCmd()

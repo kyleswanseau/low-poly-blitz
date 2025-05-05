@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class CommandbarBehaviour : MonoBehaviour
 {
+    private PlayerController _controller;
     [SerializeField] private Button _moveButton;
     [SerializeField] private Button _attackMoveButton;
     [SerializeField] private Button _stopButton;
     [SerializeField] private Button _attackButton;
     [SerializeField] private Button _rallyButton;
     [SerializeField] private Button _facstopButton;
-    private PlayerController _controller;
 
     public Rect rect { get; private set; }
 

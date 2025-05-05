@@ -29,7 +29,6 @@ public class PlayerController : MonoBehaviour
     private InfobarBehaviour _infobar;
     private ResourcebarBehaviour _resourcebar;
     private ECommand _command = ECommand.None;
-    private EBuild _buildBuilding = EBuild.None;
 
     private Player player { get; set; }
     private Camera mainCam { get; set; }
@@ -38,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public Asset? selectedSingle { get; private set; } = null;
     public List<Asset> hoveredMultiple { get; private set; } = new List<Asset>();
     public List<Asset> selected { get; private set; } = new List<Asset>();
+    public EBuild buildBuilding { get; set; } = EBuild.None;
 
     private void Start()
     {
@@ -57,11 +57,10 @@ public class PlayerController : MonoBehaviour
     {
         if (
             (_commandbar.isActiveAndEnabled && _commandbar.rect.Contains(mouse.position.value)) ||
-            (_infobar.isActiveAndEnabled && _infobar.rect.Contains(mouse.position.value)) ||
-            (_resourcebar.isActiveAndEnabled && _resourcebar.rect.Contains(mouse.position.value))
+            (_infobar.isActiveAndEnabled && _infobar.rect.Contains(mouse.position.value))
         )
         {
-            
+
         }
         else
         {
@@ -222,6 +221,7 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.S) || _command == ECommand.Stop)
         {
             StopAssets();
+            SetCommand(ECommand.None);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
@@ -247,19 +247,19 @@ public class PlayerController : MonoBehaviour
                     if (hit.collider.gameObject.layer == 6 &&
                         Vector3.Distance(pylon.transform.position, hit.point) <= Pylon.RANGE)
                     {
-                        switch (_buildBuilding)
+                        switch (buildBuilding)
                         {
                             case EBuild.Factory:
                                 pylon.BuildFactory(hit.point);
-                                _buildBuilding = EBuild.None;
+                                buildBuilding = EBuild.None;
                                 break;
                             case EBuild.Pylon:
                                 pylon.BuildPylon(hit.point);
-                                _buildBuilding = EBuild.None;
+                                buildBuilding = EBuild.None;
                                 break;
                             case EBuild.Mine:
                                 pylon.BuildMine(hit.point);
-                                _buildBuilding = EBuild.None;
+                                buildBuilding = EBuild.None;
                                 break;
                             default:
                                 break;
@@ -295,6 +295,7 @@ public class PlayerController : MonoBehaviour
                         }
                         break;
                 }
+                SetCommand(ECommand.None);
             }    
         }
         BuildAssets();
@@ -323,19 +324,19 @@ public class PlayerController : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.C))
                 {
-                    _buildBuilding = EBuild.Factory;
+                    buildBuilding = EBuild.Factory;
                 }
                 else if (Input.GetKeyDown(KeyCode.V))
                 {
-                    _buildBuilding = EBuild.Pylon;
+                    buildBuilding = EBuild.Pylon;
                 }
                 else if (Input.GetKeyDown(KeyCode.B))
                 {
-                    _buildBuilding = EBuild.Mine;
+                    buildBuilding = EBuild.Mine;
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    _buildBuilding = EBuild.None;
+                    buildBuilding = EBuild.None;
                 }
             }
         }
@@ -350,12 +351,14 @@ public class PlayerController : MonoBehaviour
     {
         foreach (Asset asset in selected)
         {
+            Vector2 spreadv2 = Random.insideUnitCircle * (selected.Count - 1) * 0.25f;
+            Vector3 spreadv3 = new Vector3(spreadv2.x, 0f, spreadv2.y);
             if (asset.GetComponent<Unit>())
             {
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    asset.GetComponent<Unit>().MoveCmd(hit.point);
+                    asset.GetComponent<Unit>().MoveCmd(hit.point + spreadv3);
                 }
             }
             if (asset is Factory factory)
@@ -363,7 +366,7 @@ public class PlayerController : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    factory.GetComponent<Factory>().MoveCmd(hit.point);
+                    factory.GetComponent<Factory>().MoveCmd(hit.point + spreadv3);
                 }
             }
         }
@@ -375,10 +378,12 @@ public class PlayerController : MonoBehaviour
         {
             if (asset.GetComponent<Unit>())
             {
+                Vector2 spreadv2 = Random.insideUnitCircle * (selected.Count - 1) * 0.25f;
+                Vector3 spreadv3 = new Vector3(spreadv2.x, 0f, spreadv2.y);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    asset.GetComponent<Unit>().AttackMoveCmd(hit.point);
+                    asset.GetComponent<Unit>().AttackMoveCmd(hit.point + spreadv3);
                 }
             }
         }
