@@ -17,7 +17,8 @@ public class UnitAI : Agent
     private Queue<int> _alliedCountHistory = new Queue<int>();
     private Queue<int> _enemyCountHistory = new Queue<int>();
     private float persistentReward;
-    int[,] grid = new int[10, 10];
+    private int gridSize = 5;
+    private int[,] grid = new int[10, 10];
 
     private void Start()
     {
@@ -55,9 +56,9 @@ public class UnitAI : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < gridSize; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < gridSize; j++)
             {
                 grid[i, j] = 0;
             }
@@ -65,7 +66,7 @@ public class UnitAI : Agent
         foreach (Asset asset in _enemy.assets)
         {
             Vector3 v3 = asset.transform.position + new Vector3(50f, 0f, 50f);
-            int[] v2 = { Mathf.FloorToInt(v3.x / 10f), Mathf.FloorToInt(v3.z / 10f) };
+            int[] v2 = { Mathf.FloorToInt(v3.x / 20f), Mathf.FloorToInt(v3.z / 20f) };
             grid[v2[0], v2[1]]++;
         }
 
@@ -73,9 +74,9 @@ public class UnitAI : Agent
         IEnumerable<Asset> enemyUnits = _enemy.assets.Where(a => a is Unit);
         sensor.AddObservation(alliedUnits.Count());
         sensor.AddObservation(enemyUnits.Count());
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < gridSize; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < gridSize; j++)
             {
                 sensor.AddObservation(grid[i, j]);
             }
@@ -86,8 +87,8 @@ public class UnitAI : Agent
     {
         if (actions.DiscreteActions[0] >= 1)
         {
-            Vector2 v2 = new Vector2(actions.DiscreteActions[1] - 4.5f, actions.DiscreteActions[2] - 4.5f);
-            Vector3 v3 = new Vector3(v2.x * 10f, 0f, v2.y * 10f);
+            Vector2 v2 = new Vector2(actions.DiscreteActions[1] - 2f, actions.DiscreteActions[2] - 2f);
+            Vector3 v3 = new Vector3(v2.x * 20f, 0f, v2.y * 20f);
             IEnumerable<Unit> alliedUnits = _player.assets.Where(a => a is Unit).Cast<Unit>();
             foreach (Unit unit in alliedUnits)
             {
@@ -95,7 +96,7 @@ public class UnitAI : Agent
             }
             if (grid[actions.DiscreteActions[1], actions.DiscreteActions[2]] > 0)
             {
-                persistentReward += 0.001f * grid[actions.DiscreteActions[1], actions.DiscreteActions[2]];
+                persistentReward += 0.002f * grid[actions.DiscreteActions[1], actions.DiscreteActions[2]];
             }
         }
     }
@@ -116,7 +117,7 @@ public class UnitAI : Agent
             }
             if (_enemyCountHistory.Max() > enemyCount)
             {
-                reward += 0.001f * (_enemyCountHistory.Max() - enemyCount);
+                reward += 0.002f * (_enemyCountHistory.Max() - enemyCount);
             }
             persistentReward += reward - 0.0001f;
             if (persistentReward > 1f)

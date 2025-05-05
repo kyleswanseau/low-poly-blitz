@@ -183,12 +183,12 @@ public class BuildingAI : Agent
         if (reward >= 1f)
         {
             //Debug.Log("BuildingAI: Passed");
-            EndEpisode();
+            //EndEpisode();
         }
         else if (reward <= -1f)
         {
             //Debug.Log("BuildingAI: Failed");
-            EndEpisode();
+            //EndEpisode();
         }
     }
 

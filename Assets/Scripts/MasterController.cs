@@ -109,8 +109,10 @@ public class MasterController : MonoBehaviour
         player1.AddPlayerAsset(player1Factory2);
         ((Factory)player1Factory2).BuildCubes();
 
+        float xRand = Random.Range(0f, 45f);
+        float yRand = Random.Range(0f, 45f);
         Asset player2Factory1 = factoryPool.Get();
-        player2Factory1.transform.position = new Vector3(0f, 0.05f, 0f);
+        player2Factory1.transform.position = new Vector3(xRand, 0.05f, yRand);
         player2Factory1.GetComponent<PlayerComponent>().player = player2;
         player2Factory1.Reset();
         player2.AddPlayerAsset(player2Factory1);
