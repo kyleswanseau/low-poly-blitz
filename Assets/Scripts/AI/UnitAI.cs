@@ -17,6 +17,7 @@ public class UnitAI : Agent
     private Queue<int> _alliedCountHistory = new Queue<int>();
     private Queue<int> _enemyCountHistory = new Queue<int>();
     private float persistentReward;
+    int[,] grid = new int[10, 10];
 
     private void Start()
     {
@@ -54,7 +55,13 @@ public class UnitAI : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        int[,] grid = new int[10, 10];
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                grid[i, j] = 0;
+            }
+        }
         foreach (Asset asset in _enemy.assets)
         {
             Vector3 v3 = asset.transform.position + new Vector3(50f, 0f, 50f);
@@ -86,6 +93,10 @@ public class UnitAI : Agent
             {
                 unit.AttackMoveCmd(v3);
             }
+            if (grid[actions.DiscreteActions[1], actions.DiscreteActions[2]] > 0)
+            {
+                persistentReward += 0.001f * grid[actions.DiscreteActions[1], actions.DiscreteActions[2]];
+            }
         }
     }
 
@@ -97,17 +108,17 @@ public class UnitAI : Agent
         int alliedCount = alliedUnits.Count();
         int enemyCount = enemyUnits.Count();
 
-        if (_alliedCountHistory.Count > 2 && _enemyCountHistory.Count > 2)
+        if (_alliedCountHistory.Count > 1 && _enemyCountHistory.Count > 1)
         {
             if (_alliedCountHistory.Max() > alliedCount)
             {
-                reward -= 0.01f * (_alliedCountHistory.Max() - alliedCount);
+                reward -= 0.0002f * (_alliedCountHistory.Max() - alliedCount);
             }
             if (_enemyCountHistory.Max() > enemyCount)
             {
-                reward += 0.1f * (_enemyCountHistory.Max() - enemyCount);
+                reward += 0.001f * (_enemyCountHistory.Max() - enemyCount);
             }
-            persistentReward += reward - 0.002f;
+            persistentReward += reward - 0.0001f;
             if (persistentReward > 1f)
             {
                 persistentReward = 1f;
@@ -116,16 +127,20 @@ public class UnitAI : Agent
             {
                 persistentReward = -1f;
             }
+            if (_enemy.assets.Count <= 0)
+            {
+                persistentReward += 10f;
+            }
             SetReward(persistentReward);
             if (persistentReward >= 1f)
             {
-                Debug.Log("UnitAI: Passed");
-                EndEpisode();
+                //Debug.Log("UnitAI: Passed");
+                //EndEpisode();
             }
             else if (persistentReward <= -1f)
             {
-                Debug.Log("UnitAI: Failed");
-                EndEpisode();
+                //Debug.Log("UnitAI: Failed");
+                //EndEpisode();
             }
 
             _alliedCountHistory.Enqueue(alliedCount);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Cube : Unit
 {
@@ -29,6 +30,12 @@ public class Cube : Unit
 
     public override void Reset()
     {
+        if (GetComponent<NavMeshAgent>())
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
         health = MAX_HEALTH;
         cooldown = COOLDOWN;
         StopCmd();

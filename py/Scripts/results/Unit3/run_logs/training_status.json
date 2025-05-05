@@ -1,0 +1,65 @@
+{
+    "UnitBehaviour": {
+        "checkpoints": [
+            {
+                "steps": 88860,
+                "file_path": "results\\Unit3\\UnitBehaviour\\UnitBehaviour-88860.onnx",
+                "reward": -0.041471800930850525,
+                "creation_time": 1746109530.8436022,
+                "auxillary_file_paths": [
+                    "results\\Unit3\\UnitBehaviour\\UnitBehaviour-88860.pt"
+                ]
+            },
+            {
+                "steps": 145440,
+                "file_path": "results\\Unit3\\UnitBehaviour\\UnitBehaviour-145440.onnx",
+                "reward": -0.2107171482224574,
+                "creation_time": 1746111979.2734878,
+                "auxillary_file_paths": [
+                    "results\\Unit3\\UnitBehaviour\\UnitBehaviour-145440.pt"
+                ]
+            },
+            {
+                "steps": 499980,
+                "file_path": "results\\Unit3\\UnitBehaviour\\UnitBehaviour-499980.onnx",
+                "reward": -0.05170757476709612,
+                "creation_time": 1746125531.3250766,
+                "auxillary_file_paths": [
+                    "results\\Unit3\\UnitBehaviour\\UnitBehaviour-499980.pt"
+                ]
+            },
+            {
+                "steps": 999960,
+                "file_path": "results\\Unit3\\UnitBehaviour\\UnitBehaviour-999960.onnx",
+                "reward": -0.24876581353403754,
+                "creation_time": 1746143597.4135535,
+                "auxillary_file_paths": [
+                    "results\\Unit3\\UnitBehaviour\\UnitBehaviour-999960.pt"
+                ]
+            },
+            {
+                "steps": 1000020,
+                "file_path": "results\\Unit3\\UnitBehaviour\\UnitBehaviour-1000020.onnx",
+                "reward": -0.24932576146195917,
+                "creation_time": 1746143597.5892026,
+                "auxillary_file_paths": [
+                    "results\\Unit3\\UnitBehaviour\\UnitBehaviour-1000020.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000020,
+            "file_path": "results\\Unit3\\UnitBehaviour.onnx",
+            "reward": -0.24932576146195917,
+            "creation_time": 1746143597.5892026,
+            "auxillary_file_paths": [
+                "results\\Unit3\\UnitBehaviour\\UnitBehaviour-1000020.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2+cu121"
+    }
+}

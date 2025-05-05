@@ -77,6 +77,7 @@ public abstract class Unit : Asset
         }
     }
 
+
     protected virtual void Attack()
     {
         if (null != attackTarget)

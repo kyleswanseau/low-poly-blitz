@@ -16,8 +16,8 @@ public class MasterController : MonoBehaviour
 
     private void Start()
     {
-        //TrainBuildingAI();
-        TrainUnitAI();
+        TrainBuildingAI();
+        //TrainUnitAI();
     }
 
     private void FixedUpdate()
