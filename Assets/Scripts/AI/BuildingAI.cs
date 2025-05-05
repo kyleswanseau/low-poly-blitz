@@ -183,12 +183,12 @@ public class BuildingAI : Agent
         if (reward >= 1f)
         {
             //Debug.Log("BuildingAI: Passed");
-            //EndEpisode();
+            EndEpisode();
         }
         else if (reward <= -1f)
         {
             //Debug.Log("BuildingAI: Failed");
-            //EndEpisode();
+            EndEpisode();
         }
     }
 
@@ -244,7 +244,7 @@ public class BuildingAI : Agent
             if (-50f < pos.x && pos.x < 50f && -50f < pos.z && pos.z < 50f)
             {
                 pylon.BuildPylon(pos);
-                AddReward(-0.1f);
+                AddReward(-0.5f);
                 retry = 10;
             }
             else
